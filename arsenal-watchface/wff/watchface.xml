@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Arsenal FC 2025/26 Third Kit Watch Face
+    Platform: Wear OS 5/6 with One UI 8
+    Watch Face Format (WFF) 2.0
+
+    Copyright (c) 2026 - Design Specification
+    Arsenal FC trademarks are property of Arsenal Football Club
+-->
+<WatchFace
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    width="450"
+    height="450">
+
+    <!-- ============================================= -->
+    <!-- USER CONFIGURATION SCHEMA                     -->
+    <!-- ============================================= -->
+    <UserConfigurations>
+        <BooleanConfiguration
+            id="show_seconds"
+            displayName="Show Seconds"
+            defaultValue="false" />
+
+        <BooleanConfiguration
+            id="match_notifications"
+            displayName="Match Day Notifications"
+            defaultValue="true" />
+
+        <ListConfiguration
+            id="accent_color"
+            displayName="Accent Color"
+            defaultValue="aqua">
+            <ListOption id="aqua" displayName="Vibrant Aqua" />
+            <ListOption id="pink" displayName="Pink Neon" />
+            <ListOption id="gold" displayName="Cannon Gold" />
+        </ListConfiguration>
+
+        <ListConfiguration
+            id="time_format"
+            displayName="Time Format"
+            defaultValue="system">
+            <ListOption id="system" displayName="System Default" />
+            <ListOption id="12h" displayName="12 Hour" />
+            <ListOption id="24h" displayName="24 Hour" />
+        </ListConfiguration>
+    </UserConfigurations>
+
+    <!-- ============================================= -->
+    <!-- SCENE: ACTIVE MODE                            -->
+    <!-- ============================================= -->
+    <Scene>
+        <!-- Background Layer -->
+        <Group name="background_layer">
+            <!-- Base gradient background -->
+            <PartDraw
+                x="0" y="0"
+                width="450" height="450">
+                <Image resource="@drawable/bg_base_gradient" />
+            </PartDraw>
+
+            <!-- Fabric texture overlay -->
+            <PartDraw
+                x="0" y="0"
+                width="450" height="450"
+                alpha="40">
+                <Image resource="@drawable/bg_fabric_texture" />
+            </PartDraw>
+
+            <!-- Vignette overlay -->
+            <PartDraw
+                x="0" y="0"
+                width="450" height="450"
+                alpha="102">
+                <Image resource="@drawable/bg_vignette" />
+            </PartDraw>
+        </Group>
+
+        <!-- Cannon Crest at 12 o'clock -->
+        <Group name="cannon_crest_group">
+            <PartDraw
+                x="195" y="35"
+                width="60" height="40"
+                pivotX="30" pivotY="20">
+                <Image resource="@drawable/cannon_crest_gold" />
+                <!-- Drop shadow effect -->
+                <Shadow
+                    color="#80000000"
+                    offsetX="0"
+                    offsetY="2"
+                    blurRadius="4" />
+            </PartDraw>
+        </Group>
+
+        <!-- Hour Index Markers -->
+        <Group name="hour_indices">
+            <!-- 12 tick marks positioned around the dial -->
+            <PartDraw x="222" y="85" width="6" height="15">
+                <RoundRectangle
+                    width="6" height="15"
+                    cornerRadius="3"
+                    color="#D4A853" />
+            </PartDraw>
+            <!-- 3 o'clock -->
+            <PartDraw x="350" y="222" width="15" height="6">
+                <RoundRectangle
+                    width="15" height="6"
+                    cornerRadius="3"
+                    color="#D4A853" />
+            </PartDraw>
+            <!-- 6 o'clock -->
+            <PartDraw x="222" y="350" width="6" height="15">
+                <RoundRectangle
+                    width="6" height="15"
+                    cornerRadius="3"
+                    color="#D4A853" />
+            </PartDraw>
+            <!-- 9 o'clock -->
+            <PartDraw x="85" y="222" width="15" height="6">
+                <RoundRectangle
+                    width="15" height="6"
+                    cornerRadius="3"
+                    color="#D4A853" />
+            </PartDraw>
+        </Group>
+
+        <!-- ============================================= -->
+        <!-- TIME DISPLAY                                  -->
+        <!-- ============================================= -->
+        <Group name="time_display">
+            <!-- Hours -->
+            <PartText
+                x="225" y="200"
+                width="140" height="80"
+                align="CENTER"
+                pivotX="70" pivotY="40">
+                <Text
+                    align="RIGHT"
+                    ellipsis="true">
+                    <Font family="@font/arsenal_sans_bold" size="72">
+                        <Template>%02d<Parameter expression="[HOUR_0_23]" /></Template>
+                    </Font>
+                    <TextColor color="#FFFFFF" />
+                </Text>
+            </PartText>
+
+            <!-- Colon Separator -->
+            <PartText
+                x="225" y="200"
+                width="20" height="80"
+                align="CENTER">
+                <Text align="CENTER">
+                    <Font family="@font/arsenal_sans_bold" size="72">
+                        <Localization>:</Localization>
+                    </Font>
+                    <!-- Blink animation -->
+                    <TextColor>
+                        <Variant mode="AMBIENT" color="#A0A8B4" />
+                        <Color color="#FFFFFF" />
+                    </TextColor>
+                </Text>
+            </PartText>
+
+            <!-- Minutes -->
+            <PartText
+                x="235" y="200"
+                width="140" height="80"
+                align="CENTER"
+                pivotX="0" pivotY="40">
+                <Text align="LEFT">
+                    <Font family="@font/arsenal_sans_bold" size="72">
+                        <Template>%02d<Parameter expression="[MINUTE]" /></Template>
+                    </Font>
+                    <TextColor color="#FFFFFF" />
+                </Text>
+            </PartText>
+
+            <!-- Seconds (conditional) -->
+            <Condition>
+                <Expressions>
+                    <Expression name="show_sec">[CONFIGURATION.show_seconds]</Expression>
+                </Expressions>
+                <Compare expression="show_sec" value="true">
+                    <PartText
+                        x="325" y="235"
+                        width="40" height="30"
+                        align="CENTER">
+                        <Text align="LEFT">
+                            <Font family="@font/arsenal_sans_medium" size="24">
+                                <Template>%02d<Parameter expression="[SECOND]" /></Template>
+                            </Font>
+                            <TextColor color="#00D4AA" />
+                        </Text>
+                    </PartText>
+                </Compare>
+            </Condition>
+        </Group>
+
+        <!-- Date Display -->
+        <Group name="date_display">
+            <PartText
+                x="225" y="275"
+                width="100" height="20"
+                align="CENTER">
+                <Text align="CENTER">
+                    <Font family="@font/arsenal_sans_medium" size="14">
+                        <Template>
+                            <Parameter expression="[DAY_OF_WEEK_S]" />
+                            <Parameter expression="[DAY_OF_MONTH]" />
+                        </Template>
+                    </Font>
+                    <TextColor color="#A0A8B4" />
+                </Text>
+            </PartText>
+        </Group>
+
+        <!-- ============================================= -->
+        <!-- COMPLICATIONS                                 -->
+        <!-- ============================================= -->
+
+        <!-- Weather Complication (10 o'clock position) -->
+        <ComplicationSlot
+            slotId="0"
+            name="weather"
+            supportedTypes="SHORT_TEXT,RANGED_VALUE,ICON"
+            defaultType="SHORT_TEXT"
+            defaultProviderComponentName="com.samsung.android.weather/..."
+            x="65" y="120"
+            width="50" height="50"
+            pivotX="25" pivotY="25">
+
+            <!-- Complication background ring -->
+            <PartDraw
+                x="0" y="0"
+                width="50" height="50">
+                <Ellipse
+                    width="50" height="50"
+                    centerX="25" centerY="25">
+                    <Stroke color="#4D00D4AA" thickness="1" />
+                    <Fill color="#CC0A1628" />
+                </Ellipse>
+            </PartDraw>
+
+            <!-- Complication content -->
+            <DefaultProviderPolicy
+                systemProvider="WEATHER"
+                configurable="true" />
+        </ComplicationSlot>
+
+        <!-- Battery Complication (2 o'clock position) -->
+        <ComplicationSlot
+            slotId="1"
+            name="battery"
+            supportedTypes="SHORT_TEXT,RANGED_VALUE"
+            defaultType="RANGED_VALUE"
+            x="335" y="120"
+            width="50" height="50"
+            pivotX="25" pivotY="25">
+
+            <!-- Complication background ring -->
+            <PartDraw
+                x="0" y="0"
+                width="50" height="50">
+                <Ellipse
+                    width="50" height="50"
+                    centerX="25" centerY="25">
+                    <Stroke color="#4D00D4AA" thickness="1" />
+                    <Fill color="#CC0A1628" />
+                </Ellipse>
+            </PartDraw>
+
+            <!-- Progress arc for battery level -->
+            <Arc
+                centerX="25" centerY="25"
+                width="48" height="48"
+                startAngle="-90"
+                endAngle="[COMPLICATION.RANGED_VALUE * 360 / 100 - 90]"
+                thickness="3">
+                <Stroke>
+                    <Gradient type="SWEEP">
+                        <GradientColor color="#00D4AA" position="0" />
+                        <GradientColor color="#00FFD0" position="1" />
+                    </Gradient>
+                </Stroke>
+            </Arc>
+
+            <DefaultProviderPolicy
+                systemProvider="BATTERY"
+                configurable="true" />
+        </ComplicationSlot>
+
+        <!-- Heart Rate Complication (8 o'clock position) -->
+        <ComplicationSlot
+            slotId="2"
+            name="heart_rate"
+            supportedTypes="SHORT_TEXT,RANGED_VALUE"
+            defaultType="SHORT_TEXT"
+            x="65" y="280"
+            width="50" height="50"
+            pivotX="25" pivotY="25">
+
+            <!-- Complication background ring -->
+            <PartDraw
+                x="0" y="0"
+                width="50" height="50">
+                <Ellipse
+                    width="50" height="50"
+                    centerX="25" centerY="25">
+                    <Stroke color="#4DFF2D78" thickness="1" />
+                    <Fill color="#CC0A1628" />
+                </Ellipse>
+            </PartDraw>
+
+            <!-- Heart icon with pulse animation -->
+            <PartDraw
+                x="16" y="10"
+                width="18" height="18"
+                name="heart_icon">
+                <Image resource="@drawable/ic_heart_pink" />
+                <Gyroscope>
+                    <ScaleAnimation
+                        fromScale="1.0"
+                        toScale="1.15"
+                        duration="400"
+                        repeatMode="REVERSE" />
+                </Gyroscope>
+            </PartDraw>
+
+            <DefaultProviderPolicy
+                systemProvider="HEART_RATE"
+                configurable="true" />
+        </ComplicationSlot>
+
+        <!-- ============================================= -->
+        <!-- DYNAMIC MATCH DAY SECTION                     -->
+        <!-- ============================================= -->
+        <Group name="dynamic_section">
+            <!--
+                This section uses conditional rendering based on
+                external data source for match information.
+
+                The match data would be provided by:
+                1. A companion phone app with Arsenal fixtures API
+                2. A Wear OS Tile data provider
+                3. A custom ComplicationDataSource
+            -->
+
+            <!-- Section background -->
+            <PartDraw
+                x="65" y="335"
+                width="320" height="100"
+                alpha="230">
+                <RoundRectangle
+                    width="320" height="100"
+                    cornerRadius="15">
+                    <Fill color="#0A1628" />
+                    <Stroke color="#4D00D4AA" thickness="1" />
+                </RoundRectangle>
+            </PartDraw>
+
+            <!-- Match Day Complication Slot -->
+            <ComplicationSlot
+                slotId="3"
+                name="match_day_data"
+                supportedTypes="LONG_TEXT,SHORT_TEXT,NO_DATA"
+                defaultType="LONG_TEXT"
+                x="65" y="335"
+                width="320" height="100">
+
+                <!-- Custom rendering based on complication data -->
+                <!-- See match_day_complication.xml for detailed logic -->
+
+            </ComplicationSlot>
+
+            <!-- Fallback: Fitness Stats (when no match data) -->
+            <Condition>
+                <Expressions>
+                    <Expression name="has_match">[COMPLICATION.3.TYPE != NO_DATA]</Expression>
+                </Expressions>
+
+                <!-- No match data - show fitness stats -->
+                <Compare expression="has_match" value="false">
+                    <Group name="fitness_stats_default">
+                        <!-- Steps indicator -->
+                        <PartDraw x="85" y="355" width="80" height="60">
+                            <Group>
+                                <PartImage x="0" y="5" width="18" height="18">
+                                    <Image resource="@drawable/ic_steps_aqua" />
+                                </PartImage>
+                                <PartText x="22" y="5" width="58" height="18">
+                                    <Text align="LEFT">
+                                        <Font family="@font/arsenal_sans_bold" size="10">
+                                            <Localization>STEPS</Localization>
+                                        </Font>
+                                        <TextColor color="#A0A8B4" />
+                                    </Text>
+                                </PartText>
+                                <PartText x="0" y="25" width="80" height="30">
+                                    <Text align="LEFT">
+                                        <Font family="@font/arsenal_sans_bold" size="18">
+                                            <Template><Parameter expression="[STEP_COUNT]" /></Template>
+                                        </Font>
+                                        <TextColor color="#FFFFFF" />
+                                    </Text>
+                                </PartText>
+                            </Group>
+                        </PartDraw>
+
+                        <!-- Heart rate indicator -->
+                        <PartDraw x="185" y="355" width="80" height="60">
+                            <Group>
+                                <PartImage x="0" y="5" width="18" height="18">
+                                    <Image resource="@drawable/ic_heart_pink" />
+                                </PartImage>
+                                <PartText x="22" y="5" width="58" height="18">
+                                    <Text align="LEFT">
+                                        <Font family="@font/arsenal_sans_bold" size="10">
+                                            <Localization>HR</Localization>
+                                        </Font>
+                                        <TextColor color="#A0A8B4" />
+                                    </Text>
+                                </PartText>
+                                <PartText x="0" y="25" width="80" height="30">
+                                    <Text align="LEFT">
+                                        <Font family="@font/arsenal_sans_bold" size="18">
+                                            <Template>
+                                                <Parameter expression="[HEART_RATE]" /> BPM
+                                            </Template>
+                                        </Font>
+                                        <TextColor color="#FF2D78" />
+                                    </Text>
+                                </PartText>
+                            </Group>
+                        </PartDraw>
+
+                        <!-- Next calendar event -->
+                        <PartDraw x="285" y="355" width="80" height="60">
+                            <Group>
+                                <PartImage x="0" y="5" width="18" height="18">
+                                    <Image resource="@drawable/ic_calendar_aqua" />
+                                </PartImage>
+                                <PartText x="22" y="5" width="58" height="18">
+                                    <Text align="LEFT">
+                                        <Font family="@font/arsenal_sans_bold" size="10">
+                                            <Localization>NEXT</Localization>
+                                        </Font>
+                                        <TextColor color="#A0A8B4" />
+                                    </Text>
+                                </PartText>
+                                <!-- Calendar complication embedded -->
+                                <ComplicationSlot
+                                    slotId="4"
+                                    name="calendar"
+                                    supportedTypes="SHORT_TEXT"
+                                    defaultType="SHORT_TEXT"
+                                    x="0" y="25"
+                                    width="80" height="30">
+                                    <DefaultProviderPolicy
+                                        systemProvider="NEXT_EVENT"
+                                        configurable="true" />
+                                </ComplicationSlot>
+                            </Group>
+                        </PartDraw>
+                    </Group>
+                </Compare>
+
+                <!-- Has match data - show match info -->
+                <Compare expression="has_match" value="true">
+                    <!-- Match content rendered by ComplicationDataSource -->
+                    <!-- See LOGIC_ARCHITECTURE.md for implementation -->
+                </Compare>
+            </Condition>
+        </Group>
+    </Scene>
+
+    <!-- ============================================= -->
+    <!-- SCENE: AMBIENT MODE (AOD)                     -->
+    <!-- ============================================= -->
+    <Scene mode="AMBIENT">
+        <!-- Pure black background for OLED -->
+        <PartDraw x="0" y="0" width="450" height="450">
+            <Rectangle width="450" height="450" color="#000000" />
+        </PartDraw>
+
+        <!-- Cannon crest - outline only -->
+        <Group name="cannon_crest_aod">
+            <PartDraw
+                x="195" y="55"
+                width="60" height="40"
+                pivotX="30" pivotY="20"
+                name="crest_ambient">
+                <Image resource="@drawable/cannon_crest_outline" />
+            </PartDraw>
+
+            <!-- Burn-in prevention shift -->
+            <BurnInProtection
+                burnInProtectionMode="SHIFT"
+                maxShiftX="2"
+                maxShiftY="2"
+                shiftIntervalMs="60000" />
+        </Group>
+
+        <!-- Time display - hollow/outline rendering -->
+        <Group name="time_aod">
+            <PartText
+                x="225" y="225"
+                width="280" height="80"
+                align="CENTER"
+                pivotX="140" pivotY="40"
+                name="time_ambient">
+                <Text align="CENTER">
+                    <Font family="@font/arsenal_sans_bold" size="72">
+                        <OutlineEffect color="#A0A8B4" thickness="1" />
+                        <Template>
+                            <Parameter expression="[HOUR_0_23]" />:<Parameter expression="[MINUTE]" />
+                        </Template>
+                    </Font>
+                    <TextColor color="#00000000" /> <!-- Transparent fill -->
+                </Text>
+            </PartText>
+
+            <BurnInProtection
+                burnInProtectionMode="SHIFT"
+                maxShiftX="2"
+                maxShiftY="2"
+                shiftIntervalMs="60000" />
+        </Group>
+
+        <!-- Match day notification (conditional) -->
+        <Condition>
+            <Expressions>
+                <Expression name="is_match_day">[COMPLICATION.3.TYPE != NO_DATA]</Expression>
+            </Expressions>
+            <Compare expression="is_match_day" value="true">
+                <Group name="match_notification_aod">
+                    <PartImage
+                        x="205" y="310"
+                        width="24" height="24"
+                        alpha="102">
+                        <Image resource="@drawable/ic_football_outline" />
+                    </PartImage>
+
+                    <PartText
+                        x="225" y="340"
+                        width="150" height="20"
+                        align="CENTER">
+                        <Text align="CENTER">
+                            <Font family="@font/arsenal_sans_bold" size="12">
+                                <OutlineEffect color="#00D4AA" thickness="1" />
+                                <Localization>MATCH TODAY</Localization>
+                            </Font>
+                            <TextColor color="#00000000" />
+                        </Text>
+                    </PartText>
+
+                    <PartText
+                        x="225" y="360"
+                        width="100" height="20"
+                        align="CENTER">
+                        <Text align="CENTER">
+                            <Font family="@font/arsenal_sans_medium" size="14">
+                                <OutlineEffect color="#4A5568" thickness="1" />
+                                <!-- Kick-off time from complication data -->
+                                <Template><Parameter expression="[COMPLICATION.3.TITLE]" /></Template>
+                            </Font>
+                            <TextColor color="#00000000" />
+                        </Text>
+                    </PartText>
+
+                    <BurnInProtection
+                        burnInProtectionMode="SHIFT"
+                        maxShiftX="2"
+                        maxShiftY="2"
+                        shiftIntervalMs="60000" />
+                </Group>
+            </Compare>
+        </Condition>
+    </Scene>
+
+    <!-- ============================================= -->
+    <!-- METADATA                                      -->
+    <!-- ============================================= -->
+    <Metadata>
+        <Preview resource="@drawable/preview_watch_face" />
+        <WallpaperInteractive>false</WallpaperInteractive>
+    </Metadata>
+
+</WatchFace>
