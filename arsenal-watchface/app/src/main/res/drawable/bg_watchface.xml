@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Watch face background with gradient and vignette -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Base navy gradient -->
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:centerX="0.5"
+                android:centerY="0.3"
+                android:gradientRadius="300"
+                android:startColor="#152238"
+                android:centerColor="#0A1628"
+                android:endColor="#061020" />
+        </shape>
+    </item>
+
+    <!-- Vignette overlay -->
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:centerX="0.5"
+                android:centerY="0.5"
+                android:gradientRadius="225"
+                android:startColor="#00000000"
+                android:endColor="#66000000" />
+        </shape>
+    </item>
+
+</layer-list>

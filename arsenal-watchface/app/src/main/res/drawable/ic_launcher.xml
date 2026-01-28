@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Background circle -->
+    <path
+        android:fillColor="#0A1628"
+        android:pathData="M54,54m-54,0a54,54 0,1 1,108 0a54,54 0,1 1,-108 0" />
+
+    <!-- Arsenal Cannon - simplified iconic design -->
+    <group
+        android:translateX="24"
+        android:translateY="34">
+        <!-- Cannon barrel -->
+        <path
+            android:fillColor="#D4A853"
+            android:pathData="M0,20 L45,15 L48,20 L48,25 L45,30 L0,25 Z" />
+        <!-- Cannon wheel -->
+        <path
+            android:fillColor="#D4A853"
+            android:pathData="M52,22.5 m-10,0 a10,10 0,1 1,20 0 a10,10 0,1 1,-20 0" />
+        <!-- Wheel center -->
+        <path
+            android:fillColor="#0A1628"
+            android:pathData="M52,22.5 m-4,0 a4,4 0,1 1,8 0 a4,4 0,1 1,-8 0" />
+        <!-- Cannon base/carriage -->
+        <path
+            android:fillColor="#B8942D"
+            android:pathData="M40,30 L60,30 L58,40 L42,40 Z" />
+    </group>
+
+    <!-- Accent ring -->
+    <path
+        android:strokeColor="#00D4AA"
+        android:strokeWidth="2"
+        android:fillColor="#00000000"
+        android:pathData="M54,54m-48,0a48,48 0,1 1,96 0a48,48 0,1 1,-96 0" />
+</vector>

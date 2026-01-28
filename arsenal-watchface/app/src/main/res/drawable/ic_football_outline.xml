@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Football icon outline for AOD -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Ball outline -->
+    <path
+        android:strokeColor="#4A5568"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2z" />
+
+    <!-- Center pentagon -->
+    <path
+        android:strokeColor="#4A5568"
+        android:strokeWidth="1"
+        android:fillColor="#00000000"
+        android:pathData="M12,7 L15,10 L14,14 L10,14 L9,10 Z" />
+
+    <!-- Lines to edges -->
+    <path
+        android:strokeColor="#4A5568"
+        android:strokeWidth="1"
+        android:fillColor="#00000000"
+        android:pathData="M12,7 L12,2 M15,10 L20,8 M14,14 L18,18 M10,14 L6,18 M9,10 L4,8" />
+</vector>

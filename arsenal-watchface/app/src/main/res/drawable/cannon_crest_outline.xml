@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Arsenal Cannon Crest - Outline version for AOD mode -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="60dp"
+    android:height="40dp"
+    android:viewportWidth="120"
+    android:viewportHeight="80">
+
+    <!-- Cannon barrel outline -->
+    <path
+        android:strokeColor="#4A5568"
+        android:strokeWidth="2"
+        android:fillColor="#00000000"
+        android:pathData="M5,40 L85,30 L92,38 L92,48 L85,56 L5,46 Z" />
+
+    <!-- Muzzle -->
+    <path
+        android:strokeColor="#4A5568"
+        android:strokeWidth="2"
+        android:fillColor="#00000000"
+        android:pathData="M2,38 L2,50 L8,48 L8,42 Z" />
+
+    <!-- Cannon wheel outline -->
+    <path
+        android:strokeColor="#4A5568"
+        android:strokeWidth="2"
+        android:fillColor="#00000000"
+        android:pathData="M100,45 m-18,0 a18,18 0,1 1,36 0 a18,18 0,1 1,-36 0" />
+
+    <!-- Wheel inner ring -->
+    <path
+        android:strokeColor="#4A5568"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M100,45 m-10,0 a10,10 0,1 1,20 0 a10,10 0,1 1,-20 0" />
+
+    <!-- Wheel hub -->
+    <path
+        android:strokeColor="#4A5568"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M100,45 m-4,0 a4,4 0,1 1,8 0 a4,4 0,1 1,-8 0" />
+
+    <!-- Carriage outline -->
+    <path
+        android:strokeColor="#4A5568"
+        android:strokeWidth="2"
+        android:fillColor="#00000000"
+        android:pathData="M78,56 L105,56 L102,70 L81,70 Z" />
+</vector>

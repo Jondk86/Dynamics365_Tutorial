@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Info -->
+    <string name="app_name">Arsenal 25/26</string>
+    <string name="watch_face_name">Arsenal 25/26 Third Kit</string>
+    <string name="watch_face_description">Premium watch face inspired by Arsenal FC 2025/26 Third Kit with Match Day intelligence</string>
+
+    <!-- Complications -->
+    <string name="complication_match_label">Arsenal Match</string>
+    <string name="complication_match_description">Shows Arsenal FC match information on match days</string>
+
+    <!-- Complication Labels -->
+    <string name="label_steps">STEPS</string>
+    <string name="label_heart_rate">HR</string>
+    <string name="label_battery">BAT</string>
+    <string name="label_weather">WEATHER</string>
+    <string name="label_calendar">NEXT</string>
+    <string name="label_bpm">BPM</string>
+
+    <!-- Match Day States -->
+    <string name="match_day">MATCH DAY</string>
+    <string name="kick_off">KICK-OFF</string>
+    <string name="live">LIVE</string>
+    <string name="half_time">HT</string>
+    <string name="full_time">FT</string>
+    <string name="postponed">POSTPONED</string>
+    <string name="vs">vs</string>
+    <string name="match_today">MATCH TODAY</string>
+
+    <!-- Match Results -->
+    <string name="result_win">WIN</string>
+    <string name="result_draw">DRAW</string>
+    <string name="result_loss">LOSS</string>
+
+    <!-- Configuration -->
+    <string name="config_show_seconds">Show Seconds</string>
+    <string name="config_accent_color">Accent Color</string>
+    <string name="config_time_format">Time Format</string>
+    <string name="config_match_notifications">Match Notifications</string>
+
+    <!-- Accent Color Options -->
+    <string name="accent_aqua">Vibrant Aqua</string>
+    <string name="accent_pink">Pink Neon</string>
+    <string name="accent_gold">Cannon Gold</string>
+
+    <!-- Time Format Options -->
+    <string name="time_format_system">System Default</string>
+    <string name="time_format_12h">12 Hour</string>
+    <string name="time_format_24h">24 Hour</string>
+
+    <!-- Loading/Error States -->
+    <string name="loading">Loading…</string>
+    <string name="no_data">No data</string>
+    <string name="error_sync">Sync error</string>
+
+    <!-- Accessibility -->
+    <string name="accessibility_time">Current time is %1$s</string>
+    <string name="accessibility_date">Today is %1$s</string>
+    <string name="accessibility_steps">%1$d steps today</string>
+    <string name="accessibility_heart_rate">Heart rate %1$d beats per minute</string>
+    <string name="accessibility_battery">Battery at %1$d percent</string>
+    <string name="accessibility_match">Arsenal %1$s %2$s at %3$s</string>
+    <string name="accessibility_live_match">Live match: Arsenal %1$d, %2$s %3$d</string>
+</resources>

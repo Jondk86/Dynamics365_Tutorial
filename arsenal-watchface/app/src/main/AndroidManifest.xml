@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Wear OS required features -->
+    <uses-feature android:name="android.hardware.type.watch" />
+
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.google.android.permission.PROVIDE_BACKGROUND" />
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.DeviceDefault">
+
+        <!-- Watch Face Service using Watch Face Format -->
+        <service
+            android:name="androidx.wear.watchface.WatchFaceService"
+            android:directBootAware="true"
+            android:exported="true"
+            android:label="@string/watch_face_name"
+            android:permission="android.permission.BIND_WALLPAPER">
+
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="com.google.android.wearable.watchface.wffVersion"
+                android:value="2" />
+
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/watch_face_info" />
+
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview"
+                android:resource="@drawable/preview_watchface" />
+
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview_circular"
+                android:resource="@drawable/preview_watchface" />
+
+            <meta-data
+                android:name="com.google.android.wearable.watchface.companionBuiltinConfigurationEnabled"
+                android:value="true" />
+        </service>
+
+        <!-- Arsenal Match Complication Data Source -->
+        <service
+            android:name=".complications.ArsenalMatchDataSource"
+            android:exported="true"
+            android:icon="@drawable/ic_complication_match"
+            android:label="@string/complication_match_label"
+            android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
+
+            <intent-filter>
+                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.wearable.complications.SUPPORTED_TYPES"
+                android:value="LONG_TEXT,SHORT_TEXT" />
+
+            <meta-data
+                android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
+                android:value="300" />
+        </service>
+
+        <!-- Wearable Data Listener for phone sync -->
+        <service
+            android:name=".data.WearableDataListenerService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <data
+                    android:host="*"
+                    android:pathPrefix="/arsenal"
+                    android:scheme="wear" />
+            </intent-filter>
+        </service>
+
+        <!-- Boot receiver to refresh complications -->
+        <receiver
+            android:name=".utils.BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

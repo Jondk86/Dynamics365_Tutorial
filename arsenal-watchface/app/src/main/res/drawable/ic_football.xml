@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Football/Soccer ball icon -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Ball outline -->
+    <path
+        android:fillColor="#00D4AA"
+        android:pathData="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2z" />
+
+    <!-- Pentagon pattern (white) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M12,4 L14.5,8 L12,10 L9.5,8 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M18,9 L19,12 L16,14 L14,11 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M6,9 L10,11 L8,14 L5,12 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M8,17 L10,14 L14,14 L16,17 L12,20 Z" />
+
+    <!-- Center pentagon (dark) -->
+    <path
+        android:fillColor="#0A1628"
+        android:pathData="M12,9 L14.5,11 L13.5,14 L10.5,14 L9.5,11 Z" />
+</vector>
