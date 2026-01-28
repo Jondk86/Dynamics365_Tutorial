@@ -26,6 +26,8 @@
     <string name="postponed">POSTPONED</string>
     <string name="vs">vs</string>
     <string name="match_today">MATCH TODAY</string>
+    <string name="away">AWAY</string>
+    <string name="home">HOME</string>
 
     <!-- Match Results -->
     <string name="result_win">WIN</string>
@@ -37,6 +39,12 @@
     <string name="config_accent_color">Accent Color</string>
     <string name="config_time_format">Time Format</string>
     <string name="config_match_notifications">Match Notifications</string>
+
+    <!-- NEW: Enhanced Configuration -->
+    <string name="config_match_audio">Match Day Audio</string>
+    <string name="config_match_audio_summary">Play kick-off whistle and goal alerts</string>
+    <string name="config_victory_glow">Victory Glow</string>
+    <string name="config_victory_glow_summary">Celebrate wins with a pulsing glow animation</string>
 
     <!-- Accent Color Options -->
     <string name="accent_aqua">Vibrant Aqua</string>
@@ -53,12 +61,32 @@
     <string name="no_data">No data</string>
     <string name="error_sync">Sync error</string>
 
+    <!-- NEW: Alert Messages -->
+    <string name="alert_kickoff_title">Kick-Off!</string>
+    <string name="alert_kickoff_message">The match has started!</string>
+    <string name="alert_goal_title">GOOOAL!</string>
+    <string name="alert_goal_message">%1$s scores for Arsenal!</string>
+    <string name="alert_goal_message_generic">Arsenal have scored!</string>
+    <string name="alert_halftime_title">Half-Time</string>
+    <string name="alert_halftime_message">Score at half-time: %1$s</string>
+    <string name="alert_fulltime_title">Full Time</string>
+    <string name="alert_fulltime_message">Final score: %1$s</string>
+    <string name="alert_victory_title">Victory!</string>
+    <string name="alert_victory_message">Arsenal win %1$s! COYG!</string>
+
+    <!-- Notification Channel -->
+    <string name="notification_channel_name">Arsenal Match Alerts</string>
+    <string name="notification_channel_description">Alerts for Arsenal match events including kick-off, goals, and results</string>
+
     <!-- Accessibility -->
     <string name="accessibility_time">Current time is %1$s</string>
     <string name="accessibility_date">Today is %1$s</string>
     <string name="accessibility_steps">%1$d steps today</string>
     <string name="accessibility_heart_rate">Heart rate %1$d beats per minute</string>
     <string name="accessibility_battery">Battery at %1$d percent</string>
+    <string name="accessibility_battery_low">Battery low at %1$d percent</string>
     <string name="accessibility_match">Arsenal %1$s %2$s at %3$s</string>
     <string name="accessibility_live_match">Live match: Arsenal %1$d, %2$s %3$d</string>
+    <string name="accessibility_match_away">Away match at %1$s</string>
+    <string name="accessibility_victory_glow">Victory celebration active</string>
 </resources>

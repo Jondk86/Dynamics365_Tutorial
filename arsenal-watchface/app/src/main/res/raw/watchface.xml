@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Arsenal FC 2025/26 Third Kit Watch Face
-    Watch Face Format (WFF) 2.0 Definition
-    Target: Samsung Galaxy Watch 6 / Wear OS 5+
+    Watch Face Format (WFF) 2.0 Definition - ENHANCED VERSION
+    Target: Samsung Galaxy Watch 6 / Wear OS 5+ / One UI 8
+
+    Enhancements:
+    - Tap-to-Expand Match Mode
+    - Dynamic Battery Gradient (Aqua→Gold→Pink)
+    - Home/Away Visual Cue
+    - Enhanced AOD with subtle gradient & aggressive pixel shifting
+    - Victory Glow Animation
 -->
 <WatchFace
     width="450"
@@ -27,18 +34,112 @@
             <ListOption id="pink" displayName="Pink Neon" />
             <ListOption id="gold" displayName="Cannon Gold" />
         </ListConfiguration>
+
+        <!-- NEW: Match Day Audio Setting -->
+        <BooleanConfiguration
+            id="match_audio_enabled"
+            displayName="Match Day Audio"
+            defaultValue="true"
+            screenReaderText="Enable kick-off whistle and goal alerts" />
+
+        <!-- NEW: Victory Glow Setting -->
+        <BooleanConfiguration
+            id="victory_glow_enabled"
+            displayName="Victory Glow"
+            defaultValue="true"
+            screenReaderText="Enable celebration animation after Arsenal wins" />
     </UserConfigurations>
 
     <!-- ================================================ -->
     <!-- ACTIVE MODE SCENE                                 -->
     <!-- ================================================ -->
     <Scene>
-        <!-- Background -->
+        <!-- Background - Standard (Home/Emirates) -->
         <PartImage
             x="0" y="0"
             width="450" height="450">
             <Image resource="bg_watchface" />
         </PartImage>
+
+        <!-- NEW: Home/Away Visual Cue - Away stripe indicator -->
+        <!-- Shows subtle vertical stripe when match is Away -->
+        <Condition>
+            <Expressions>
+                <Expression name="isAway">[COMPLICATION.3.CONTENT_DESCRIPTION] == "AWAY"</Expression>
+            </Expressions>
+            <Compare expression="isAway" value="true">
+                <PartDraw x="0" y="0" width="8" height="450">
+                    <Rectangle width="8" height="450">
+                        <!-- Away kit accent stripe (adjustable per season) -->
+                        <Fill>
+                            <Gradient type="LINEAR" startX="0" startY="0" endX="0" endY="450">
+                                <GradientColor color="#00000000" position="0" />
+                                <GradientColor color="#E8B87D" position="0.3" />
+                                <GradientColor color="#E8B87D" position="0.7" />
+                                <GradientColor color="#00000000" position="1" />
+                            </Gradient>
+                        </Fill>
+                    </Rectangle>
+                </PartDraw>
+                <!-- Away indicator dot -->
+                <PartDraw x="15" y="420" width="8" height="8">
+                    <Ellipse width="8" height="8" centerX="4" centerY="4">
+                        <Fill color="#E8B87D" />
+                    </Ellipse>
+                </PartDraw>
+                <PartText x="26" y="417" width="40" height="14">
+                    <Text align="LEFT" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="10" weight="MEDIUM">AWAY</Font>
+                        <Color color="#E8B87D" />
+                    </Text>
+                </PartText>
+            </Compare>
+        </Condition>
+
+        <!-- NEW: Victory Glow Animation Ring -->
+        <!-- Pulses for 5 minutes after Arsenal wins -->
+        <Condition>
+            <Expressions>
+                <Expression name="victoryGlow">[COMPLICATION.3.CONTENT_DESCRIPTION] == "VICTORY"</Expression>
+                <Expression name="glowEnabled">[CONFIGURATION.victory_glow_enabled]</Expression>
+            </Expressions>
+            <Compare expression="victoryGlow" value="true">
+                <Compare expression="glowEnabled" value="true">
+                    <PartDraw x="0" y="0" width="450" height="450">
+                        <Ellipse width="450" height="450" centerX="225" centerY="225">
+                            <Stroke thickness="4">
+                                <Gradient type="SWEEP">
+                                    <GradientColor color="#FF2D78" position="0" />
+                                    <GradientColor color="#FF0066" position="0.25" />
+                                    <GradientColor color="#FF2D78" position="0.5" />
+                                    <GradientColor color="#FF0066" position="0.75" />
+                                    <GradientColor color="#FF2D78" position="1" />
+                                </Gradient>
+                            </Stroke>
+                        </Ellipse>
+                        <!-- Pulse animation -->
+                        <Animation
+                            target="alpha"
+                            from="255" to="128"
+                            duration="1000"
+                            repeatMode="REVERSE"
+                            repeatCount="INFINITE" />
+                    </PartDraw>
+                    <!-- Inner glow -->
+                    <PartDraw x="5" y="5" width="440" height="440" alpha="80">
+                        <Ellipse width="440" height="440" centerX="220" centerY="220">
+                            <Stroke color="#FF2D78" thickness="6" />
+                        </Ellipse>
+                        <Animation
+                            target="alpha"
+                            from="80" to="30"
+                            duration="800"
+                            repeatMode="REVERSE"
+                            repeatCount="INFINITE" />
+                    </PartDraw>
+                </Compare>
+            </Compare>
+        </Condition>
 
         <!-- Cannon Crest at 12 o'clock -->
         <PartImage
@@ -51,33 +152,25 @@
         <!-- Hour Index Markers (Gold) -->
         <!-- 12 o'clock -->
         <PartDraw x="222" y="85" width="6" height="15">
-            <RoundRectangle
-                width="6" height="15"
-                cornerRadius="3">
+            <RoundRectangle width="6" height="15" cornerRadius="3">
                 <Fill color="#D4A853" />
             </RoundRectangle>
         </PartDraw>
         <!-- 3 o'clock -->
         <PartDraw x="350" y="222" width="15" height="6">
-            <RoundRectangle
-                width="15" height="6"
-                cornerRadius="3">
+            <RoundRectangle width="15" height="6" cornerRadius="3">
                 <Fill color="#D4A853" />
             </RoundRectangle>
         </PartDraw>
         <!-- 6 o'clock -->
         <PartDraw x="222" y="350" width="6" height="15">
-            <RoundRectangle
-                width="6" height="15"
-                cornerRadius="3">
+            <RoundRectangle width="6" height="15" cornerRadius="3">
                 <Fill color="#D4A853" />
             </RoundRectangle>
         </PartDraw>
         <!-- 9 o'clock -->
         <PartDraw x="85" y="222" width="15" height="6">
-            <RoundRectangle
-                width="15" height="6"
-                cornerRadius="3">
+            <RoundRectangle width="15" height="6" cornerRadius="3">
                 <Fill color="#D4A853" />
             </RoundRectangle>
         </PartDraw>
@@ -87,12 +180,8 @@
         <!-- ============================================= -->
 
         <!-- Hours -->
-        <PartText
-            x="85" y="185"
-            width="130" height="80">
-            <Text
-                align="RIGHT"
-                maxLines="1">
+        <PartText x="85" y="185" width="130" height="80">
+            <Text align="RIGHT" maxLines="1">
                 <Font family="SYNC_TO_DEVICE" size="72" weight="BOLD">
                     <Template>%02d<Parameter expression="[HOUR_0_23]" /></Template>
                 </Font>
@@ -106,9 +195,7 @@
         </PartText>
 
         <!-- Colon -->
-        <PartText
-            x="215" y="185"
-            width="20" height="80">
+        <PartText x="215" y="185" width="20" height="80">
             <Text align="CENTER" maxLines="1">
                 <Font family="SYNC_TO_DEVICE" size="72" weight="BOLD">:</Font>
                 <Variant mode="AMBIENT">
@@ -120,12 +207,8 @@
         </PartText>
 
         <!-- Minutes -->
-        <PartText
-            x="235" y="185"
-            width="130" height="80">
-            <Text
-                align="LEFT"
-                maxLines="1">
+        <PartText x="235" y="185" width="130" height="80">
+            <Text align="LEFT" maxLines="1">
                 <Font family="SYNC_TO_DEVICE" size="72" weight="BOLD">
                     <Template>%02d<Parameter expression="[MINUTE]" /></Template>
                 </Font>
@@ -143,9 +226,7 @@
                 <Expression name="showSec">[CONFIGURATION.show_seconds]</Expression>
             </Expressions>
             <Compare expression="showSec" value="true">
-                <PartText
-                    x="325" y="230"
-                    width="50" height="35">
+                <PartText x="325" y="230" width="50" height="35">
                     <Text align="LEFT" maxLines="1">
                         <Font family="SYNC_TO_DEVICE" size="24" weight="MEDIUM">
                             <Template>%02d<Parameter expression="[SECOND]" /></Template>
@@ -157,9 +238,7 @@
         </Condition>
 
         <!-- Date Display -->
-        <PartText
-            x="175" y="265"
-            width="100" height="25">
+        <PartText x="175" y="265" width="100" height="25">
             <Text align="CENTER" maxLines="1">
                 <Font family="SYNC_TO_DEVICE" size="14" weight="MEDIUM">
                     <Template>
@@ -204,7 +283,10 @@
             </Complication>
         </ComplicationSlot>
 
-        <!-- Battery Complication (2 o'clock) -->
+        <!-- ============================================= -->
+        <!-- ENHANCED: Dynamic Battery Gradient            -->
+        <!-- Aqua (>80%) → Gold (50-80%) → Pink (<20%)    -->
+        <!-- ============================================= -->
         <ComplicationSlot
             slotId="1"
             name="battery"
@@ -219,18 +301,106 @@
                 <PartImage x="0" y="0" width="50" height="50">
                     <Image resource="bg_complication_slot" />
                 </PartImage>
-                <!-- Progress arc -->
-                <PartDraw x="0" y="0" width="50" height="50">
-                    <Arc
-                        centerX="25" centerY="25"
-                        startAngle="-90"
-                        sweepAngle="[COMPLICATION.RANGED_VALUE_VALUE / COMPLICATION.RANGED_VALUE_MAX * 360]">
-                        <Stroke color="#00D4AA" cap="ROUND" thickness="3" />
-                    </Arc>
-                </PartDraw>
-                <PartImage x="16" y="8" width="18" height="18">
-                    <Image resource="ic_battery" />
-                </PartImage>
+
+                <!-- Dynamic Battery Arc with Color Gradients -->
+                <Condition>
+                    <Expressions>
+                        <Expression name="batteryLevel">[COMPLICATION.RANGED_VALUE_VALUE]</Expression>
+                    </Expressions>
+
+                    <!-- Battery > 80%: Vibrant Aqua -->
+                    <Compare expression="batteryLevel > 80">
+                        <PartDraw x="0" y="0" width="50" height="50">
+                            <Arc centerX="25" centerY="25" startAngle="-90"
+                                sweepAngle="[COMPLICATION.RANGED_VALUE_VALUE / COMPLICATION.RANGED_VALUE_MAX * 360]">
+                                <Stroke cap="ROUND" thickness="3">
+                                    <Gradient type="SWEEP">
+                                        <GradientColor color="#00D4AA" position="0" />
+                                        <GradientColor color="#00FFD0" position="1" />
+                                    </Gradient>
+                                </Stroke>
+                            </Arc>
+                        </PartDraw>
+                        <PartImage x="16" y="8" width="18" height="18">
+                            <Image resource="ic_battery_aqua" />
+                        </PartImage>
+                    </Compare>
+
+                    <!-- Battery 50-80%: Aqua to Gold transition -->
+                    <Compare expression="batteryLevel > 50">
+                        <Compare expression="batteryLevel <= 80">
+                            <PartDraw x="0" y="0" width="50" height="50">
+                                <Arc centerX="25" centerY="25" startAngle="-90"
+                                    sweepAngle="[COMPLICATION.RANGED_VALUE_VALUE / COMPLICATION.RANGED_VALUE_MAX * 360]">
+                                    <Stroke cap="ROUND" thickness="3">
+                                        <Gradient type="SWEEP">
+                                            <GradientColor color="#00D4AA" position="0" />
+                                            <GradientColor color="#D4A853" position="1" />
+                                        </Gradient>
+                                    </Stroke>
+                                </Arc>
+                            </PartDraw>
+                            <PartImage x="16" y="8" width="18" height="18">
+                                <Image resource="ic_battery_gold" />
+                            </PartImage>
+                        </Compare>
+                    </Compare>
+
+                    <!-- Battery 20-50%: Gold -->
+                    <Compare expression="batteryLevel > 20">
+                        <Compare expression="batteryLevel <= 50">
+                            <PartDraw x="0" y="0" width="50" height="50">
+                                <Arc centerX="25" centerY="25" startAngle="-90"
+                                    sweepAngle="[COMPLICATION.RANGED_VALUE_VALUE / COMPLICATION.RANGED_VALUE_MAX * 360]">
+                                    <Stroke color="#D4A853" cap="ROUND" thickness="3" />
+                                </Arc>
+                            </PartDraw>
+                            <PartImage x="16" y="8" width="18" height="18">
+                                <Image resource="ic_battery_gold" />
+                            </PartImage>
+                        </Compare>
+                    </Compare>
+
+                    <!-- Battery <= 20%: Pink Neon (Critical) -->
+                    <Compare expression="batteryLevel <= 20">
+                        <PartDraw x="0" y="0" width="50" height="50">
+                            <Arc centerX="25" centerY="25" startAngle="-90"
+                                sweepAngle="[COMPLICATION.RANGED_VALUE_VALUE / COMPLICATION.RANGED_VALUE_MAX * 360]">
+                                <Stroke cap="ROUND" thickness="3">
+                                    <Gradient type="SWEEP">
+                                        <GradientColor color="#FF2D78" position="0" />
+                                        <GradientColor color="#FF0066" position="1" />
+                                    </Gradient>
+                                </Stroke>
+                            </Arc>
+                            <!-- Pulsing effect for low battery warning -->
+                            <Animation
+                                target="alpha"
+                                from="255" to="180"
+                                duration="800"
+                                repeatMode="REVERSE"
+                                repeatCount="INFINITE" />
+                        </PartDraw>
+                        <PartImage x="16" y="8" width="18" height="18">
+                            <Image resource="ic_battery_pink" />
+                        </PartImage>
+                    </Compare>
+
+                    <!-- Default fallback -->
+                    <Default>
+                        <PartDraw x="0" y="0" width="50" height="50">
+                            <Arc centerX="25" centerY="25" startAngle="-90"
+                                sweepAngle="[COMPLICATION.RANGED_VALUE_VALUE / COMPLICATION.RANGED_VALUE_MAX * 360]">
+                                <Stroke color="#00D4AA" cap="ROUND" thickness="3" />
+                            </Arc>
+                        </PartDraw>
+                        <PartImage x="16" y="8" width="18" height="18">
+                            <Image resource="ic_battery" />
+                        </PartImage>
+                    </Default>
+                </Condition>
+
+                <!-- Battery percentage text -->
                 <PartText x="0" y="28" width="50" height="18">
                     <Text align="CENTER" maxLines="1">
                         <Font family="SYNC_TO_DEVICE" size="12" weight="BOLD">
@@ -270,7 +440,8 @@
         </ComplicationSlot>
 
         <!-- ============================================= -->
-        <!-- DYNAMIC MATCH DAY SECTION                     -->
+        <!-- ENHANCED: Interactive Match Day Section       -->
+        <!-- Tap-to-Expand with Custom Actions            -->
         <!-- ============================================= -->
 
         <!-- Match Section Background -->
@@ -280,7 +451,7 @@
             <Image resource="bg_match_section" />
         </PartImage>
 
-        <!-- Match Day Complication (Lower section) -->
+        <!-- Match Day Complication with TAP ACTION -->
         <ComplicationSlot
             slotId="3"
             name="match_data"
@@ -291,19 +462,53 @@
             width="300" height="80">
             <BoundingOval x="0" y="0" width="300" height="80" />
 
-            <!-- Long Text: Match info -->
+            <!-- Long Text: Match info with TAP to open Arsenal app/stream -->
             <Complication type="LONG_TEXT">
-                <!-- Icon (football or live indicator) -->
-                <PartImage x="10" y="30" width="24" height="24">
-                    <ImageReference expression="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
-                </PartImage>
-                <!-- Title (kick-off time or LIVE) -->
-                <PartText x="45" y="15" width="100" height="20">
-                    <Text align="LEFT" maxLines="1">
-                        <Font family="SYNC_TO_DEVICE" size="12" weight="BOLD" />
-                        <Color color="#00D4AA" />
-                    </Text>
-                </PartText>
+                <!-- Tap target for entire section -->
+                <TapAction>
+                    <!-- Opens Arsenal app or calendar based on match state -->
+                    <Launch intent="com.arsenal.mobile" fallback="com.google.android.calendar" />
+                </TapAction>
+
+                <!-- LIVE indicator with glow -->
+                <Condition>
+                    <Expressions>
+                        <Expression name="isLive">[COMPLICATION.TITLE] == "LIVE"</Expression>
+                    </Expressions>
+                    <Compare expression="isLive" value="true">
+                        <!-- Pulsing LIVE badge -->
+                        <PartImage x="10" y="10" width="40" height="16">
+                            <Image resource="ic_live_indicator" />
+                            <Animation
+                                target="alpha"
+                                from="255" to="180"
+                                duration="1000"
+                                repeatMode="REVERSE"
+                                repeatCount="INFINITE" />
+                        </PartImage>
+                        <!-- Minute indicator -->
+                        <PartText x="55" y="10" width="50" height="16">
+                            <Text align="LEFT" maxLines="1">
+                                <Font family="SYNC_TO_DEVICE" size="12" weight="BOLD" />
+                                <Color color="#A0A8B4" />
+                            </Text>
+                        </PartText>
+                    </Compare>
+                    <Default>
+                        <!-- Icon (football) -->
+                        <PartImage x="10" y="30" width="24" height="24">
+                            <ImageReference expression="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
+                        </PartImage>
+                        <!-- Title (kick-off time) -->
+                        <PartText x="45" y="15" width="100" height="20">
+                            <Text align="LEFT" maxLines="1">
+                                <Font family="SYNC_TO_DEVICE" size="12" weight="BOLD" />
+                                <Color color="#00D4AA" />
+                            </Text>
+                        </PartText>
+                    </Default>
+                </Condition>
+
                 <!-- Main text (matchup or score) -->
                 <PartText x="45" y="38" width="245" height="30">
                     <Text align="LEFT" maxLines="1">
@@ -311,28 +516,41 @@
                         <Color color="#FFFFFF" />
                     </Text>
                 </PartText>
+
+                <!-- Tap hint icon (arrow) -->
+                <PartText x="270" y="35" width="20" height="20">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="14" weight="BOLD">→</Font>
+                        <Color color="#4A5568" />
+                    </Text>
+                </PartText>
             </Complication>
 
             <!-- No Data: Show fitness stats fallback -->
             <Complication type="NO_DATA">
-                <!-- Steps -->
-                <PartImage x="10" y="15" width="18" height="18">
-                    <Image resource="ic_steps" />
-                </PartImage>
-                <PartText x="10" y="35" width="80" height="20">
-                    <Text align="LEFT" maxLines="1">
-                        <Font family="SYNC_TO_DEVICE" size="14" weight="BOLD">
-                            <Template><Parameter expression="[STEP_COUNT]" /></Template>
-                        </Font>
-                        <Color color="#FFFFFF" />
-                    </Text>
-                </PartText>
-                <PartText x="10" y="55" width="60" height="15">
-                    <Text align="LEFT" maxLines="1">
-                        <Font family="SYNC_TO_DEVICE" size="10" weight="MEDIUM">steps</Font>
-                        <Color color="#A0A8B4" />
-                    </Text>
-                </PartText>
+                <!-- Steps - Tap to open Samsung Health -->
+                <Group>
+                    <TapAction>
+                        <Launch intent="com.samsung.android.health" />
+                    </TapAction>
+                    <PartImage x="10" y="15" width="18" height="18">
+                        <Image resource="ic_steps" />
+                    </PartImage>
+                    <PartText x="10" y="35" width="80" height="20">
+                        <Text align="LEFT" maxLines="1">
+                            <Font family="SYNC_TO_DEVICE" size="14" weight="BOLD">
+                                <Template><Parameter expression="[STEP_COUNT]" /></Template>
+                            </Font>
+                            <Color color="#FFFFFF" />
+                        </Text>
+                    </PartText>
+                    <PartText x="10" y="55" width="60" height="15">
+                        <Text align="LEFT" maxLines="1">
+                            <Font family="SYNC_TO_DEVICE" size="10" weight="MEDIUM">steps</Font>
+                            <Color color="#A0A8B4" />
+                        </Text>
+                    </PartText>
+                </Group>
 
                 <!-- Divider -->
                 <PartDraw x="100" y="20" width="1" height="45">
@@ -341,18 +559,23 @@
                     </Rectangle>
                 </PartDraw>
 
-                <!-- Heart Rate -->
-                <PartImage x="115" y="15" width="18" height="18">
-                    <Image resource="ic_heart" />
-                </PartImage>
-                <PartText x="115" y="35" width="80" height="20">
-                    <Text align="LEFT" maxLines="1">
-                        <Font family="SYNC_TO_DEVICE" size="14" weight="BOLD">
-                            <Template><Parameter expression="[HEART_RATE]" /> BPM</Template>
-                        </Font>
-                        <Color color="#FF2D78" />
-                    </Text>
-                </PartText>
+                <!-- Heart Rate - Tap to open Samsung Health -->
+                <Group>
+                    <TapAction>
+                        <Launch intent="com.samsung.android.health" />
+                    </TapAction>
+                    <PartImage x="115" y="15" width="18" height="18">
+                        <Image resource="ic_heart" />
+                    </PartImage>
+                    <PartText x="115" y="35" width="80" height="20">
+                        <Text align="LEFT" maxLines="1">
+                            <Font family="SYNC_TO_DEVICE" size="14" weight="BOLD">
+                                <Template><Parameter expression="[HEART_RATE]" /> BPM</Template>
+                            </Font>
+                            <Color color="#FF2D78" />
+                        </Text>
+                    </PartText>
+                </Group>
 
                 <!-- Divider -->
                 <PartDraw x="200" y="20" width="1" height="45">
@@ -361,42 +584,57 @@
                     </Rectangle>
                 </PartDraw>
 
-                <!-- Calendar slot -->
-                <PartImage x="215" y="15" width="18" height="18">
-                    <Image resource="ic_calendar" />
-                </PartImage>
-                <PartText x="215" y="35" width="75" height="35">
-                    <Text align="LEFT" maxLines="2">
-                        <Font family="SYNC_TO_DEVICE" size="11" weight="MEDIUM" />
-                        <Color color="#A0A8B4" />
-                    </Text>
-                </PartText>
+                <!-- Calendar - Tap to open Calendar -->
+                <Group>
+                    <TapAction>
+                        <Launch intent="com.google.android.calendar" />
+                    </TapAction>
+                    <PartImage x="215" y="15" width="18" height="18">
+                        <Image resource="ic_calendar" />
+                    </PartImage>
+                    <PartText x="215" y="35" width="75" height="35">
+                        <Text align="LEFT" maxLines="2">
+                            <Font family="SYNC_TO_DEVICE" size="11" weight="MEDIUM" />
+                            <Color color="#A0A8B4" />
+                        </Text>
+                    </PartText>
+                </Group>
             </Complication>
         </ComplicationSlot>
 
     </Scene>
 
     <!-- ================================================ -->
-    <!-- AMBIENT MODE (AOD) SCENE                          -->
+    <!-- ENHANCED: AOD with Subtle Gradient & Aggressive  -->
+    <!-- Pixel Shifting (3-5px every minute)              -->
     <!-- ================================================ -->
     <Scene mode="AMBIENT">
-        <!-- Pure black background -->
+        <!-- Ultra-dark gradient (0.5% luminosity) instead of pure black -->
         <PartDraw x="0" y="0" width="450" height="450">
             <Rectangle width="450" height="450">
-                <Fill color="#000000" />
+                <Fill>
+                    <Gradient type="RADIAL" centerX="225" centerY="225" radius="320">
+                        <GradientColor color="#020408" position="0" />
+                        <GradientColor color="#000000" position="1" />
+                    </Gradient>
+                </Fill>
             </Rectangle>
         </PartDraw>
 
-        <!-- Cannon crest outline -->
+        <!-- Cannon crest outline with aggressive pixel shifting -->
         <PartImage
             x="195" y="55"
             width="60" height="40"
             alpha="255">
             <Image resource="cannon_crest_outline" />
-            <RenderMode>BURN_IN_PROTECTION</RenderMode>
+            <!-- Aggressive burn-in protection: 3-5px shift -->
+            <BurnInProtection
+                shiftPixels="5"
+                shiftIntervalMs="60000"
+                shiftMode="RANDOM" />
         </PartImage>
 
-        <!-- Time (outline/hollow) -->
+        <!-- Time (outline/hollow) with pixel shifting -->
         <PartText
             x="85" y="200"
             width="280" height="80">
@@ -409,7 +647,10 @@
                 <Outline color="#A0A8B4" width="1" />
                 <Color color="#00000000" />
             </Text>
-            <RenderMode>BURN_IN_PROTECTION</RenderMode>
+            <BurnInProtection
+                shiftPixels="4"
+                shiftIntervalMs="60000"
+                shiftMode="RANDOM" />
         </PartText>
 
         <!-- Match day indicator (if match today) -->
@@ -423,7 +664,10 @@
                     width="24" height="24"
                     alpha="102">
                     <Image resource="ic_football_outline" />
-                    <RenderMode>BURN_IN_PROTECTION</RenderMode>
+                    <BurnInProtection
+                        shiftPixels="3"
+                        shiftIntervalMs="60000"
+                        shiftMode="RANDOM" />
                 </PartImage>
                 <PartText
                     x="150" y="340"
@@ -433,7 +677,50 @@
                         <Outline color="#00D4AA" width="1" />
                         <Color color="#00000000" />
                     </Text>
-                    <RenderMode>BURN_IN_PROTECTION</RenderMode>
+                    <BurnInProtection
+                        shiftPixels="3"
+                        shiftIntervalMs="60000"
+                        shiftMode="RANDOM" />
+                </PartText>
+                <!-- Kick-off time in AOD -->
+                <PartText
+                    x="150" y="360"
+                    width="150" height="20">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="10" weight="MEDIUM">
+                            <Template><Parameter expression="[COMPLICATION.3.TITLE]" /></Template>
+                        </Font>
+                        <Outline color="#4A5568" width="1" />
+                        <Color color="#00000000" />
+                    </Text>
+                    <BurnInProtection
+                        shiftPixels="3"
+                        shiftIntervalMs="60000"
+                        shiftMode="RANDOM" />
+                </PartText>
+            </Compare>
+        </Condition>
+
+        <!-- LIVE match indicator in AOD -->
+        <Condition>
+            <Expressions>
+                <Expression name="isLiveAod">[COMPLICATION.3.CONTENT_DESCRIPTION] == "MATCH_LIVE"</Expression>
+            </Expressions>
+            <Compare expression="isLiveAod" value="true">
+                <PartText
+                    x="150" y="380"
+                    width="150" height="20">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="14" weight="BOLD">
+                            <Template><Parameter expression="[COMPLICATION.3.TEXT]" /></Template>
+                        </Font>
+                        <Outline color="#FF2D78" width="1" />
+                        <Color color="#00000000" />
+                    </Text>
+                    <BurnInProtection
+                        shiftPixels="3"
+                        shiftIntervalMs="60000"
+                        shiftMode="RANDOM" />
                 </PartText>
             </Compare>
         </Condition>
@@ -444,6 +731,6 @@
     <!-- ================================================ -->
     <Metadata
         preview="preview_watchface"
-        wallpaperInteractive="false" />
+        wallpaperInteractive="true" />
 
 </WatchFace>

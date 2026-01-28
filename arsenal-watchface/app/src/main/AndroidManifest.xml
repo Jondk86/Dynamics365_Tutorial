@@ -11,6 +11,10 @@
     <uses-permission android:name="android.permission.BODY_SENSORS" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
 
+    <!-- NEW: Permissions for audio alerts and haptics -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -68,12 +72,13 @@
                 android:name="android.support.wearable.complications.SUPPORTED_TYPES"
                 android:value="LONG_TEXT,SHORT_TEXT" />
 
+            <!-- Reduced polling - rely on push notifications instead -->
             <meta-data
                 android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
-                android:value="300" />
+                android:value="900" />
         </service>
 
-        <!-- Wearable Data Listener for phone sync -->
+        <!-- Wearable Data Listener for phone sync (legacy) -->
         <service
             android:name=".data.WearableDataListenerService"
             android:exported="true">
@@ -83,6 +88,26 @@
                 <data
                     android:host="*"
                     android:pathPrefix="/arsenal"
+                    android:scheme="wear" />
+            </intent-filter>
+        </service>
+
+        <!-- NEW: Firebase Push Message Service for real-time match updates -->
+        <service
+            android:name=".data.FirebaseMatchService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <data
+                    android:host="*"
+                    android:pathPrefix="/arsenal/match"
+                    android:scheme="wear" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+                <data
+                    android:host="*"
+                    android:path="/arsenal/match"
                     android:scheme="wear" />
             </intent-filter>
         </service>
