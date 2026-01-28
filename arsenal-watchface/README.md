@@ -4,6 +4,22 @@
 
 A premium watch face inspired by the Arsenal FC 2025/2026 Third Kit, featuring an intelligent Match Day Dynamic Complication that automatically transforms on Arsenal match days.
 
+> **For Personal Use Only** - This project is not affiliated with Arsenal FC.
+
+---
+
+## Quick Start
+
+```bash
+# Build the APK
+./gradlew assembleDebug
+
+# Install on connected watch
+adb install app/build/outputs/apk/debug/app-debug.apk
+```
+
+See [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md) for detailed setup guide.
+
 ---
 
 ## Features
@@ -42,16 +58,38 @@ A premium watch face inspired by the Arsenal FC 2025/2026 Third Kit, featuring a
 
 ```
 arsenal-watchface/
+├── app/
+│   ├── build.gradle.kts              # App build configuration
+│   ├── proguard-rules.pro            # ProGuard rules
+│   └── src/main/
+│       ├── AndroidManifest.xml       # App manifest
+│       ├── kotlin/com/arsenal/watchface/
+│       │   ├── complications/
+│       │   │   └── ArsenalMatchDataSource.kt
+│       │   ├── data/
+│       │   │   ├── MatchModels.kt
+│       │   │   └── WearableDataListenerService.kt
+│       │   └── utils/
+│       │       └── BootReceiver.kt
+│       └── res/
+│           ├── drawable/             # Vector icons & backgrounds
+│           ├── raw/
+│           │   └── watchface.xml     # WFF 2.0 definition
+│           ├── values/
+│           │   ├── colors.xml        # Color palette
+│           │   └── strings.xml       # String resources
+│           └── xml/
+│               └── watch_face_info.xml
 ├── docs/
-│   ├── DESIGN_SPECIFICATION.md    # Complete visual design spec
-│   └── LOGIC_ARCHITECTURE.md      # Match day system architecture
-├── wff/
-│   └── watchface.xml              # Watch Face Format implementation
+│   ├── DESIGN_SPECIFICATION.md       # Complete visual design spec
+│   └── LOGIC_ARCHITECTURE.md         # Match day system architecture
 ├── assets/
-│   └── ASSETS_MANIFEST.md         # Visual assets specification
-├── src/
-│   └── ArsenalMatchDataSource.kt  # Complication data source
-└── README.md
+│   └── ASSETS_MANIFEST.md            # Visual assets specification
+├── build.gradle.kts                  # Root build config
+├── settings.gradle.kts               # Gradle settings
+├── gradle.properties                 # Gradle properties
+├── BUILD_INSTRUCTIONS.md             # Build & install guide
+└── README.md                         # This file
 ```
 
 ---
@@ -62,10 +100,10 @@ arsenal-watchface/
 |-----------|------------|
 | Watch Face Format | WFF 2.0+ |
 | Platform | Wear OS 5/6 with One UI 8 |
+| Language | Kotlin 1.9 |
+| Min SDK | 30 (Android 11) |
+| Target SDK | 34 (Android 14) |
 | Resolution | 450 x 450px (Galaxy Watch 6) |
-| Match Data | football-data.org API |
-| Data Sync | Wear Data Layer API |
-| Background Sync | WorkManager |
 
 ---
 
@@ -94,25 +132,35 @@ NO_MATCH ──────▶ MATCH_UPCOMING ──────▶ MATCH_LIVE
 
 ---
 
-## Setup Requirements
+## Installation
 
-### Development
-1. Android Studio with Wear OS SDK
-2. Samsung Watch Face Studio (optional, for visual preview)
-3. Galaxy Watch 6 or emulator
+### Prerequisites
+- Android Studio (Hedgehog+)
+- Galaxy Watch 6 with Developer Mode enabled
+- ADB installed
 
-### API Configuration
-1. Register at [football-data.org](https://www.football-data.org/)
-2. Obtain API key (free tier: 10 calls/minute)
-3. Add to `local.properties`:
+### Build & Install
+
+1. **Clone and open in Android Studio**
+
+2. **Build the APK:**
+   ```bash
+   ./gradlew assembleDebug
    ```
-   FOOTBALL_API_KEY=your_api_key_here
+
+3. **Connect to your watch via ADB:**
+   ```bash
+   adb connect <watch-ip>:5555
    ```
 
-### Building
-```bash
-./gradlew assembleRelease
-```
+4. **Install:**
+   ```bash
+   adb install app/build/outputs/apk/debug/app-debug.apk
+   ```
+
+5. **Select the watch face** in your watch face gallery
+
+For detailed instructions including Google Drive installation, see [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md).
 
 ---
 
@@ -120,6 +168,7 @@ NO_MATCH ──────▶ MATCH_UPCOMING ──────▶ MATCH_LIVE
 
 | Document | Description |
 |----------|-------------|
+| [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md) | Step-by-step build and install guide |
 | [DESIGN_SPECIFICATION.md](docs/DESIGN_SPECIFICATION.md) | Complete visual design, layout, colors, typography |
 | [LOGIC_ARCHITECTURE.md](docs/LOGIC_ARCHITECTURE.md) | Match day system, state machine, data flow |
 | [ASSETS_MANIFEST.md](assets/ASSETS_MANIFEST.md) | All required visual assets with specs |
@@ -128,7 +177,7 @@ NO_MATCH ──────▶ MATCH_UPCOMING ──────▶ MATCH_LIVE
 
 ## License
 
-Design specification for educational purposes. Arsenal FC trademarks are property of Arsenal Football Club. This project is not affiliated with or endorsed by Arsenal FC.
+**For personal use only.** Arsenal FC trademarks are the property of Arsenal Football Club. This project is not affiliated with or endorsed by Arsenal FC.
 
 ---
 

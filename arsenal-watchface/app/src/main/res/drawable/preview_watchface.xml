@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Watch face preview for selector -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background -->
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:centerX="0.5"
+                android:centerY="0.3"
+                android:gradientRadius="225"
+                android:startColor="#152238"
+                android:centerColor="#0A1628"
+                android:endColor="#061020" />
+        </shape>
+    </item>
+
+    <!-- Vignette -->
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="180"
+                android:startColor="#00000000"
+                android:endColor="#80000000" />
+        </shape>
+    </item>
+
+    <!-- Cannon crest at top -->
+    <item
+        android:drawable="@drawable/cannon_crest"
+        android:gravity="top|center_horizontal"
+        android:top="35dp"
+        android:width="60dp"
+        android:height="40dp" />
+
+    <!-- Accent ring -->
+    <item>
+        <shape android:shape="oval">
+            <stroke
+                android:width="2dp"
+                android:color="#00D4AA" />
+            <size
+                android:width="280dp"
+                android:height="280dp" />
+        </shape>
+    </item>
+</layer-list>

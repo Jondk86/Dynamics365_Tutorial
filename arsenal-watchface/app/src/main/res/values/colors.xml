@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Arsenal 25/26 Third Kit Color Palette -->
+
+    <!-- Primary Colors - Deep Navy Base -->
+    <color name="navy_deep">#0A1628</color>
+    <color name="navy_dark">#061020</color>
+    <color name="navy_light">#152238</color>
+    <color name="navy_shadow">#1A2D45</color>
+
+    <!-- Accent Colors - Vibrant Neon -->
+    <color name="aqua_vibrant">#00D4AA</color>
+    <color name="aqua_electric">#00FFD0</color>
+    <color name="aqua_dim">#4D00D4AA</color>
+
+    <color name="pink_neon">#FF2D78</color>
+    <color name="pink_hot">#FF0066</color>
+    <color name="pink_dim">#4DFF2D78</color>
+
+    <!-- Metallic Accents - Gold/Copper -->
+    <color name="gold_cannon">#D4A853</color>
+    <color name="copper_highlight">#E8B87D</color>
+    <color name="bronze_shadow">#8B6914</color>
+    <color name="gold_mid">#B8942D</color>
+
+    <!-- Utility Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="grey_silver">#A0A8B4</color>
+    <color name="grey_dim">#4A5568</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Semantic Colors -->
+    <color name="text_primary">@color/white</color>
+    <color name="text_secondary">@color/grey_silver</color>
+    <color name="text_ambient">@color/grey_silver</color>
+    <color name="text_accent">@color/aqua_vibrant</color>
+
+    <color name="heart_rate">@color/pink_neon</color>
+    <color name="steps">@color/aqua_vibrant</color>
+    <color name="battery_good">@color/aqua_vibrant</color>
+    <color name="battery_medium">@color/gold_cannon</color>
+    <color name="battery_low">@color/pink_neon</color>
+
+    <color name="live_indicator">@color/pink_hot</color>
+    <color name="match_day_accent">@color/aqua_vibrant</color>
+
+    <!-- Background Colors -->
+    <color name="bg_watchface">@color/navy_deep</color>
+    <color name="bg_ambient">@color/black</color>
+    <color name="bg_complication">#CC0A1628</color>
+    <color name="bg_match_section">#E60A1628</color>
+
+    <!-- Border Colors -->
+    <color name="border_complication">@color/aqua_dim</color>
+    <color name="border_match_section">@color/aqua_dim</color>
+    <color name="border_ambient">@color/grey_dim</color>
+</resources>

@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Arsenal FC 2025/26 Third Kit Watch Face
+    Watch Face Format (WFF) 2.0 Definition
+    Target: Samsung Galaxy Watch 6 / Wear OS 5+
+-->
+<WatchFace
+    width="450"
+    height="450">
+
+    <!-- ================================================ -->
+    <!-- USER CONFIGURATIONS                               -->
+    <!-- ================================================ -->
+    <UserConfigurations>
+        <BooleanConfiguration
+            id="show_seconds"
+            displayName="Show Seconds"
+            defaultValue="false"
+            screenReaderText="Toggle seconds display" />
+
+        <ListConfiguration
+            id="accent_color"
+            displayName="Accent Color"
+            defaultValue="aqua"
+            screenReaderText="Choose accent color">
+            <ListOption id="aqua" displayName="Vibrant Aqua" />
+            <ListOption id="pink" displayName="Pink Neon" />
+            <ListOption id="gold" displayName="Cannon Gold" />
+        </ListConfiguration>
+    </UserConfigurations>
+
+    <!-- ================================================ -->
+    <!-- ACTIVE MODE SCENE                                 -->
+    <!-- ================================================ -->
+    <Scene>
+        <!-- Background -->
+        <PartImage
+            x="0" y="0"
+            width="450" height="450">
+            <Image resource="bg_watchface" />
+        </PartImage>
+
+        <!-- Cannon Crest at 12 o'clock -->
+        <PartImage
+            x="195" y="35"
+            width="60" height="40"
+            alpha="255">
+            <Image resource="cannon_crest" />
+        </PartImage>
+
+        <!-- Hour Index Markers (Gold) -->
+        <!-- 12 o'clock -->
+        <PartDraw x="222" y="85" width="6" height="15">
+            <RoundRectangle
+                width="6" height="15"
+                cornerRadius="3">
+                <Fill color="#D4A853" />
+            </RoundRectangle>
+        </PartDraw>
+        <!-- 3 o'clock -->
+        <PartDraw x="350" y="222" width="15" height="6">
+            <RoundRectangle
+                width="15" height="6"
+                cornerRadius="3">
+                <Fill color="#D4A853" />
+            </RoundRectangle>
+        </PartDraw>
+        <!-- 6 o'clock -->
+        <PartDraw x="222" y="350" width="6" height="15">
+            <RoundRectangle
+                width="6" height="15"
+                cornerRadius="3">
+                <Fill color="#D4A853" />
+            </RoundRectangle>
+        </PartDraw>
+        <!-- 9 o'clock -->
+        <PartDraw x="85" y="222" width="15" height="6">
+            <RoundRectangle
+                width="15" height="6"
+                cornerRadius="3">
+                <Fill color="#D4A853" />
+            </RoundRectangle>
+        </PartDraw>
+
+        <!-- ============================================= -->
+        <!-- TIME DISPLAY                                  -->
+        <!-- ============================================= -->
+
+        <!-- Hours -->
+        <PartText
+            x="85" y="185"
+            width="130" height="80">
+            <Text
+                align="RIGHT"
+                maxLines="1">
+                <Font family="SYNC_TO_DEVICE" size="72" weight="BOLD">
+                    <Template>%02d<Parameter expression="[HOUR_0_23]" /></Template>
+                </Font>
+                <Variant mode="AMBIENT">
+                    <Font family="SYNC_TO_DEVICE" size="72" weight="BOLD" />
+                    <Outline color="#A0A8B4" width="1" />
+                    <Color color="#00000000" />
+                </Variant>
+                <Color color="#FFFFFF" />
+            </Text>
+        </PartText>
+
+        <!-- Colon -->
+        <PartText
+            x="215" y="185"
+            width="20" height="80">
+            <Text align="CENTER" maxLines="1">
+                <Font family="SYNC_TO_DEVICE" size="72" weight="BOLD">:</Font>
+                <Variant mode="AMBIENT">
+                    <Outline color="#A0A8B4" width="1" />
+                    <Color color="#00000000" />
+                </Variant>
+                <Color color="#FFFFFF" />
+            </Text>
+        </PartText>
+
+        <!-- Minutes -->
+        <PartText
+            x="235" y="185"
+            width="130" height="80">
+            <Text
+                align="LEFT"
+                maxLines="1">
+                <Font family="SYNC_TO_DEVICE" size="72" weight="BOLD">
+                    <Template>%02d<Parameter expression="[MINUTE]" /></Template>
+                </Font>
+                <Variant mode="AMBIENT">
+                    <Outline color="#A0A8B4" width="1" />
+                    <Color color="#00000000" />
+                </Variant>
+                <Color color="#FFFFFF" />
+            </Text>
+        </PartText>
+
+        <!-- Seconds (conditional based on config) -->
+        <Condition>
+            <Expressions>
+                <Expression name="showSec">[CONFIGURATION.show_seconds]</Expression>
+            </Expressions>
+            <Compare expression="showSec" value="true">
+                <PartText
+                    x="325" y="230"
+                    width="50" height="35">
+                    <Text align="LEFT" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="24" weight="MEDIUM">
+                            <Template>%02d<Parameter expression="[SECOND]" /></Template>
+                        </Font>
+                        <Color color="#00D4AA" />
+                    </Text>
+                </PartText>
+            </Compare>
+        </Condition>
+
+        <!-- Date Display -->
+        <PartText
+            x="175" y="265"
+            width="100" height="25">
+            <Text align="CENTER" maxLines="1">
+                <Font family="SYNC_TO_DEVICE" size="14" weight="MEDIUM">
+                    <Template>
+                        <Parameter expression="[DAY_OF_WEEK_S]" /> <Parameter expression="[DAY_OF_MONTH]" />
+                    </Template>
+                </Font>
+                <Variant mode="AMBIENT">
+                    <Color color="#4A5568" />
+                </Variant>
+                <Color color="#A0A8B4" />
+            </Text>
+        </PartText>
+
+        <!-- ============================================= -->
+        <!-- COMPLICATIONS                                 -->
+        <!-- ============================================= -->
+
+        <!-- Weather Complication (10 o'clock) -->
+        <ComplicationSlot
+            slotId="0"
+            name="weather"
+            displayName="Weather"
+            supportedTypes="SHORT_TEXT,RANGED_VALUE,SMALL_IMAGE"
+            defaultType="SHORT_TEXT"
+            defaultProviderType="WEATHER"
+            x="65" y="120"
+            width="50" height="50">
+            <BoundingCircle x="25" y="25" r="25" />
+            <Complication type="SHORT_TEXT">
+                <PartImage x="0" y="0" width="50" height="50">
+                    <Image resource="bg_complication_slot" />
+                </PartImage>
+                <PartImage x="16" y="8" width="18" height="18">
+                    <Image resource="ic_weather_clear" />
+                </PartImage>
+                <PartText x="0" y="28" width="50" height="18">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="14" weight="BOLD" />
+                        <Color color="#FFFFFF" />
+                    </Text>
+                </PartText>
+            </Complication>
+        </ComplicationSlot>
+
+        <!-- Battery Complication (2 o'clock) -->
+        <ComplicationSlot
+            slotId="1"
+            name="battery"
+            displayName="Battery"
+            supportedTypes="SHORT_TEXT,RANGED_VALUE"
+            defaultType="RANGED_VALUE"
+            defaultProviderType="BATTERY"
+            x="335" y="120"
+            width="50" height="50">
+            <BoundingCircle x="25" y="25" r="25" />
+            <Complication type="RANGED_VALUE">
+                <PartImage x="0" y="0" width="50" height="50">
+                    <Image resource="bg_complication_slot" />
+                </PartImage>
+                <!-- Progress arc -->
+                <PartDraw x="0" y="0" width="50" height="50">
+                    <Arc
+                        centerX="25" centerY="25"
+                        startAngle="-90"
+                        sweepAngle="[COMPLICATION.RANGED_VALUE_VALUE / COMPLICATION.RANGED_VALUE_MAX * 360]">
+                        <Stroke color="#00D4AA" cap="ROUND" thickness="3" />
+                    </Arc>
+                </PartDraw>
+                <PartImage x="16" y="8" width="18" height="18">
+                    <Image resource="ic_battery" />
+                </PartImage>
+                <PartText x="0" y="28" width="50" height="18">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="12" weight="BOLD">
+                            <Template><Parameter expression="[COMPLICATION.RANGED_VALUE_VALUE]" />%</Template>
+                        </Font>
+                        <Color color="#FFFFFF" />
+                    </Text>
+                </PartText>
+            </Complication>
+        </ComplicationSlot>
+
+        <!-- Heart Rate Complication (8 o'clock) -->
+        <ComplicationSlot
+            slotId="2"
+            name="heart_rate"
+            displayName="Heart Rate"
+            supportedTypes="SHORT_TEXT,RANGED_VALUE"
+            defaultType="SHORT_TEXT"
+            defaultProviderType="HEART_RATE"
+            x="65" y="280"
+            width="50" height="50">
+            <BoundingCircle x="25" y="25" r="25" />
+            <Complication type="SHORT_TEXT">
+                <PartImage x="0" y="0" width="50" height="50">
+                    <Image resource="bg_complication_slot" />
+                </PartImage>
+                <PartImage x="16" y="8" width="18" height="18">
+                    <Image resource="ic_heart" />
+                </PartImage>
+                <PartText x="0" y="28" width="50" height="18">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="12" weight="BOLD" />
+                        <Color color="#FF2D78" />
+                    </Text>
+                </PartText>
+            </Complication>
+        </ComplicationSlot>
+
+        <!-- ============================================= -->
+        <!-- DYNAMIC MATCH DAY SECTION                     -->
+        <!-- ============================================= -->
+
+        <!-- Match Section Background -->
+        <PartImage
+            x="65" y="335"
+            width="320" height="100">
+            <Image resource="bg_match_section" />
+        </PartImage>
+
+        <!-- Match Day Complication (Lower section) -->
+        <ComplicationSlot
+            slotId="3"
+            name="match_data"
+            displayName="Arsenal Match"
+            supportedTypes="LONG_TEXT,SHORT_TEXT,NO_DATA"
+            defaultType="LONG_TEXT"
+            x="75" y="345"
+            width="300" height="80">
+            <BoundingOval x="0" y="0" width="300" height="80" />
+
+            <!-- Long Text: Match info -->
+            <Complication type="LONG_TEXT">
+                <!-- Icon (football or live indicator) -->
+                <PartImage x="10" y="30" width="24" height="24">
+                    <ImageReference expression="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
+                </PartImage>
+                <!-- Title (kick-off time or LIVE) -->
+                <PartText x="45" y="15" width="100" height="20">
+                    <Text align="LEFT" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="12" weight="BOLD" />
+                        <Color color="#00D4AA" />
+                    </Text>
+                </PartText>
+                <!-- Main text (matchup or score) -->
+                <PartText x="45" y="38" width="245" height="30">
+                    <Text align="LEFT" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="18" weight="BOLD" />
+                        <Color color="#FFFFFF" />
+                    </Text>
+                </PartText>
+            </Complication>
+
+            <!-- No Data: Show fitness stats fallback -->
+            <Complication type="NO_DATA">
+                <!-- Steps -->
+                <PartImage x="10" y="15" width="18" height="18">
+                    <Image resource="ic_steps" />
+                </PartImage>
+                <PartText x="10" y="35" width="80" height="20">
+                    <Text align="LEFT" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="14" weight="BOLD">
+                            <Template><Parameter expression="[STEP_COUNT]" /></Template>
+                        </Font>
+                        <Color color="#FFFFFF" />
+                    </Text>
+                </PartText>
+                <PartText x="10" y="55" width="60" height="15">
+                    <Text align="LEFT" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="10" weight="MEDIUM">steps</Font>
+                        <Color color="#A0A8B4" />
+                    </Text>
+                </PartText>
+
+                <!-- Divider -->
+                <PartDraw x="100" y="20" width="1" height="45">
+                    <Rectangle width="1" height="45">
+                        <Fill color="#4A5568" />
+                    </Rectangle>
+                </PartDraw>
+
+                <!-- Heart Rate -->
+                <PartImage x="115" y="15" width="18" height="18">
+                    <Image resource="ic_heart" />
+                </PartImage>
+                <PartText x="115" y="35" width="80" height="20">
+                    <Text align="LEFT" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="14" weight="BOLD">
+                            <Template><Parameter expression="[HEART_RATE]" /> BPM</Template>
+                        </Font>
+                        <Color color="#FF2D78" />
+                    </Text>
+                </PartText>
+
+                <!-- Divider -->
+                <PartDraw x="200" y="20" width="1" height="45">
+                    <Rectangle width="1" height="45">
+                        <Fill color="#4A5568" />
+                    </Rectangle>
+                </PartDraw>
+
+                <!-- Calendar slot -->
+                <PartImage x="215" y="15" width="18" height="18">
+                    <Image resource="ic_calendar" />
+                </PartImage>
+                <PartText x="215" y="35" width="75" height="35">
+                    <Text align="LEFT" maxLines="2">
+                        <Font family="SYNC_TO_DEVICE" size="11" weight="MEDIUM" />
+                        <Color color="#A0A8B4" />
+                    </Text>
+                </PartText>
+            </Complication>
+        </ComplicationSlot>
+
+    </Scene>
+
+    <!-- ================================================ -->
+    <!-- AMBIENT MODE (AOD) SCENE                          -->
+    <!-- ================================================ -->
+    <Scene mode="AMBIENT">
+        <!-- Pure black background -->
+        <PartDraw x="0" y="0" width="450" height="450">
+            <Rectangle width="450" height="450">
+                <Fill color="#000000" />
+            </Rectangle>
+        </PartDraw>
+
+        <!-- Cannon crest outline -->
+        <PartImage
+            x="195" y="55"
+            width="60" height="40"
+            alpha="255">
+            <Image resource="cannon_crest_outline" />
+            <RenderMode>BURN_IN_PROTECTION</RenderMode>
+        </PartImage>
+
+        <!-- Time (outline/hollow) -->
+        <PartText
+            x="85" y="200"
+            width="280" height="80">
+            <Text align="CENTER" maxLines="1">
+                <Font family="SYNC_TO_DEVICE" size="72" weight="BOLD">
+                    <Template>
+                        <Parameter expression="[HOUR_0_23]" />:<Parameter expression="[MINUTE]" />
+                    </Template>
+                </Font>
+                <Outline color="#A0A8B4" width="1" />
+                <Color color="#00000000" />
+            </Text>
+            <RenderMode>BURN_IN_PROTECTION</RenderMode>
+        </PartText>
+
+        <!-- Match day indicator (if match today) -->
+        <Condition>
+            <Expressions>
+                <Expression name="hasMatch">[COMPLICATION.3.TYPE != NO_DATA]</Expression>
+            </Expressions>
+            <Compare expression="hasMatch" value="true">
+                <PartImage
+                    x="213" y="310"
+                    width="24" height="24"
+                    alpha="102">
+                    <Image resource="ic_football_outline" />
+                    <RenderMode>BURN_IN_PROTECTION</RenderMode>
+                </PartImage>
+                <PartText
+                    x="150" y="340"
+                    width="150" height="20">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="12" weight="BOLD">MATCH TODAY</Font>
+                        <Outline color="#00D4AA" width="1" />
+                        <Color color="#00000000" />
+                    </Text>
+                    <RenderMode>BURN_IN_PROTECTION</RenderMode>
+                </PartText>
+            </Compare>
+        </Condition>
+    </Scene>
+
+    <!-- ================================================ -->
+    <!-- METADATA                                          -->
+    <!-- ================================================ -->
+    <Metadata
+        preview="preview_watchface"
+        wallpaperInteractive="false" />
+
+</WatchFace>

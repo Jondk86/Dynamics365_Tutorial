@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Weather clear/sunny icon -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Sun center -->
+    <path
+        android:fillColor="#00D4AA"
+        android:pathData="M12,7c-2.76,0 -5,2.24 -5,5s2.24,5 5,5 5,-2.24 5,-5 -2.24,-5 -5,-5z" />
+    <!-- Sun rays -->
+    <path
+        android:fillColor="#00D4AA"
+        android:pathData="M11,1h2v3h-2z" />
+    <path
+        android:fillColor="#00D4AA"
+        android:pathData="M11,20h2v3h-2z" />
+    <path
+        android:fillColor="#00D4AA"
+        android:pathData="M1,11h3v2h-3z" />
+    <path
+        android:fillColor="#00D4AA"
+        android:pathData="M20,11h3v2h-3z" />
+    <path
+        android:fillColor="#00D4AA"
+        android:pathData="M4.22,3.51l1.42,1.42 -2.12,2.12 -1.42,-1.42z" />
+    <path
+        android:fillColor="#00D4AA"
+        android:pathData="M18.36,17.66l1.42,1.42 -2.12,2.12 -1.42,-1.42z" />
+    <path
+        android:fillColor="#00D4AA"
+        android:pathData="M3.52,18.36l2.12,-2.12 1.42,1.42 -2.12,2.12z" />
+    <path
+        android:fillColor="#00D4AA"
+        android:pathData="M17.66,4.22l2.12,-2.12 1.42,1.42 -2.12,2.12z" />
+</vector>
