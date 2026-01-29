@@ -12,7 +12,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+            background: linear-gradient(135deg, #3a4a5e 0%, #2a3a4e 50%, #1a2a3e 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -26,7 +26,7 @@
         h1 {
             font-size: 1.5rem;
             margin-bottom: 10px;
-            color: #00D4AA;
+            color: #CDFF00;
             text-align: center;
         }
 
@@ -38,8 +38,8 @@
 
         .watch-container {
             position: relative;
-            width: 320px;
-            height: 320px;
+            width: 380px;
+            height: 380px;
         }
 
         .watch-bezel {
@@ -47,38 +47,49 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: linear-gradient(145deg, #2a2a3a, #1a1a2a);
+            background: linear-gradient(145deg, #3a4a5e, #2a3a4e);
             box-shadow:
                 0 10px 40px rgba(0, 0, 0, 0.5),
                 inset 0 2px 4px rgba(255, 255, 255, 0.1),
                 inset 0 -2px 4px rgba(0, 0, 0, 0.3);
-            padding: 12px;
+            padding: 14px;
         }
 
         .watch-screen {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: radial-gradient(ellipse 120% 100% at 50% 30%, #152238 0%, #0A1628 40%, #061020 100%);
+            background: #0A1628;
             position: relative;
             overflow: hidden;
         }
 
-        /* Fabric texture overlay */
-        .watch-screen::before {
-            content: '';
+        /* Geometric chevron/zigzag pattern */
+        .chevron-pattern {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 1px,
-                rgba(255, 255, 255, 0.02) 1px,
-                rgba(255, 255, 255, 0.02) 2px
-            );
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .chevron-pattern svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Emirates Stadium silhouette */
+        .stadium-silhouette {
+            position: absolute;
+            top: 28%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 85%;
+            height: 50px;
+            opacity: 0.15;
+            z-index: 2;
             pointer-events: none;
         }
 
@@ -90,8 +101,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at center, transparent 50%, rgba(0, 0, 0, 0.4) 100%);
+            background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.5) 100%);
             pointer-events: none;
+            z-index: 20;
         }
 
         /* Victory glow animation */
@@ -112,6 +124,7 @@
             opacity: 0;
             transition: opacity 0.5s;
             pointer-events: none;
+            z-index: 30;
         }
 
         .victory-glow.active {
@@ -137,52 +150,22 @@
                 transparent 100%);
             opacity: 0;
             transition: opacity 0.3s;
-            z-index: 5;
+            z-index: 25;
         }
 
         .away-stripe.visible {
             opacity: 1;
         }
 
-        .away-indicator {
-            position: absolute;
-            bottom: 25px;
-            left: 15px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 10;
-        }
-
-        .away-indicator.visible {
-            opacity: 1;
-        }
-
-        .away-dot {
-            width: 6px;
-            height: 6px;
-            background: #E8B87D;
-            border-radius: 50%;
-        }
-
-        .away-text {
-            font-size: 9px;
-            color: #E8B87D;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-
         /* Cannon crest */
         .cannon-crest {
             position: absolute;
-            top: 25px;
+            top: 32px;
             left: 50%;
             transform: translateX(-50%);
-            width: 50px;
-            height: 35px;
-            z-index: 10;
+            width: 55px;
+            height: 30px;
+            z-index: 15;
         }
 
         .cannon-crest svg {
@@ -191,276 +174,214 @@
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
         }
 
-        /* Hour markers */
+        /* Hour markers - Pink */
+        .hour-markers {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+        }
+
         .hour-marker {
             position: absolute;
-            background: #D4A853;
-            border-radius: 3px;
+            background: #FF2D78;
+            transform-origin: center center;
         }
 
-        .hour-marker.top {
-            top: 58px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 5px;
-            height: 12px;
+        /* Main markers at 12, 3, 6, 9 */
+        .hour-marker.major {
+            width: 4px;
+            height: 18px;
+            border-radius: 2px;
         }
 
-        .hour-marker.right {
-            right: 58px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 12px;
-            height: 5px;
+        /* Minor tick marks */
+        .hour-marker.minor {
+            width: 2px;
+            height: 10px;
+            border-radius: 1px;
         }
 
-        .hour-marker.bottom {
-            bottom: 58px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 5px;
-            height: 12px;
-        }
-
-        .hour-marker.left {
-            left: 58px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 12px;
-            height: 5px;
-        }
-
-        /* Time display */
-        .time-display {
+        /* Clock hands container */
+        .clock-hands {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -60%);
-            text-align: center;
-            z-index: 10;
-        }
-
-        .time {
-            font-size: 52px;
-            font-weight: 700;
-            color: #FFFFFF;
-            letter-spacing: -2px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .time .colon {
-            animation: blink 1s ease-in-out infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .seconds {
-            position: absolute;
-            right: -35px;
-            bottom: 10px;
-            font-size: 18px;
-            color: #00D4AA;
-            font-weight: 500;
-        }
-
-        .date {
-            font-size: 12px;
-            color: #A0A8B4;
-            margin-top: 5px;
-            letter-spacing: 1px;
-        }
-
-        /* Complications */
-        .complication {
-            position: absolute;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: rgba(10, 22, 40, 0.8);
-            border: 1px solid rgba(0, 212, 170, 0.3);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .complication:hover {
-            transform: scale(1.1);
-            border-color: rgba(0, 212, 170, 0.6);
-        }
-
-        .complication.weather {
-            top: 85px;
-            left: 45px;
-        }
-
-        .complication.battery {
-            top: 85px;
-            right: 45px;
-        }
-
-        .complication.heart {
-            bottom: 100px;
-            left: 45px;
-        }
-
-        .complication-icon {
-            font-size: 14px;
-            margin-bottom: 2px;
-        }
-
-        .complication-value {
-            font-size: 11px;
-            font-weight: 700;
-            color: #FFFFFF;
-        }
-
-        .complication.battery .complication-value {
-            color: #00D4AA;
-        }
-
-        .complication.heart .complication-icon,
-        .complication.heart .complication-value {
-            color: #FF2D78;
-        }
-
-        /* Battery arc */
-        .battery-arc {
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            width: 46px;
-            height: 46px;
-        }
-
-        .battery-arc circle {
-            fill: none;
-            stroke-width: 3;
-            stroke-linecap: round;
-            transform: rotate(-90deg);
-            transform-origin: center;
-        }
-
-        /* Match section */
-        .match-section {
-            position: absolute;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 230px;
-            height: 70px;
-            background: rgba(10, 22, 40, 0.9);
-            border: 1px solid rgba(0, 212, 170, 0.3);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            z-index: 10;
-            cursor: pointer;
-            transition: border-color 0.2s;
-        }
-
-        .match-section:hover {
-            border-color: rgba(0, 212, 170, 0.6);
-        }
-
-        .match-icon {
-            font-size: 20px;
-            margin-right: 12px;
-        }
-
-        .match-info {
-            flex: 1;
-        }
-
-        .match-time {
-            font-size: 11px;
-            color: #00D4AA;
-            font-weight: 700;
-            margin-bottom: 3px;
-        }
-
-        .match-teams {
-            font-size: 14px;
-            color: #FFFFFF;
-            font-weight: 700;
-        }
-
-        .match-arrow {
-            color: #4A5568;
-            font-size: 14px;
-        }
-
-        /* Live indicator */
-        .live-badge {
-            display: none;
-            background: #FF0066;
-            color: white;
-            font-size: 9px;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 3px;
-            animation: livePulse 1s ease-in-out infinite alternate;
-        }
-
-        .live-badge.active {
-            display: inline-block;
-        }
-
-        @keyframes livePulse {
-            0% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
-
-        /* Fitness stats (no match) */
-        .fitness-stats {
-            display: none;
+            transform: translate(-50%, -50%);
             width: 100%;
-            justify-content: space-between;
+            height: 100%;
+            z-index: 10;
         }
 
-        .fitness-stats.active {
-            display: flex;
+        /* Analog hands - Neon Yellow/Lime with outline style */
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom center;
+            border-radius: 4px;
         }
 
-        .fitness-stat {
+        .hand.hour {
+            width: 8px;
+            height: 70px;
+            margin-left: -4px;
+            background: transparent;
+            border: 3px solid #CDFF00;
+            border-radius: 4px;
+        }
+
+        .hand.minute {
+            width: 6px;
+            height: 95px;
+            margin-left: -3px;
+            background: transparent;
+            border: 3px solid #CDFF00;
+            border-radius: 3px;
+        }
+
+        .hand.second {
+            width: 2px;
+            height: 105px;
+            margin-left: -1px;
+            background: #FF2D78;
+        }
+
+        /* Center dot */
+        .center-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            background: #FF2D78;
+            border-radius: 50%;
+            z-index: 12;
+            border: 2px solid #CDFF00;
+        }
+
+        /* Battery arc at 3 o'clock */
+        .battery-arc-container {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            width: 50px;
+            height: 70px;
+            z-index: 15;
+        }
+
+        .battery-arc-container svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Bottom info area */
+        .bottom-info {
+            position: absolute;
+            bottom: 55px;
+            left: 50%;
+            transform: translateX(-50%);
             text-align: center;
-            flex: 1;
-            border-right: 1px solid #4A5568;
-            padding: 0 8px;
+            z-index: 15;
+            width: 200px;
         }
 
-        .fitness-stat:last-child {
-            border-right: none;
-        }
-
-        .fitness-stat-icon {
-            font-size: 14px;
+        .day-time-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 8px;
             margin-bottom: 4px;
         }
 
-        .fitness-stat-value {
-            font-size: 13px;
+        .day-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #FFFFFF;
+            letter-spacing: 1px;
+        }
+
+        .digital-time {
+            font-size: 24px;
+            font-weight: 700;
+            color: #FFFFFF;
+            letter-spacing: 1px;
+        }
+
+        .ampm {
+            font-size: 12px;
+            font-weight: 600;
+            color: #FFFFFF;
+            margin-left: 4px;
+        }
+
+        .steps-row {
+            font-size: 16px;
+            font-weight: 700;
+            color: #CDFF00;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+
+        .date-row {
+            font-size: 12px;
+            color: #A0A8B4;
+            letter-spacing: 2px;
+        }
+
+        /* Match section - appears when match is on */
+        .match-section {
+            position: absolute;
+            bottom: 45px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            text-align: center;
+            z-index: 15;
+            display: none;
+        }
+
+        .match-section.active {
+            display: block;
+        }
+
+        .match-status {
+            font-size: 12px;
+            font-weight: 700;
+            color: #FF2D78;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        .match-score {
+            font-size: 28px;
             font-weight: 700;
             color: #FFFFFF;
         }
 
-        .fitness-stat-label {
-            font-size: 8px;
+        .match-teams-small {
+            font-size: 11px;
             color: #A0A8B4;
-            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .fitness-stat.steps .fitness-stat-icon { color: #00D4AA; }
-        .fitness-stat.hr .fitness-stat-icon,
-        .fitness-stat.hr .fitness-stat-value { color: #FF2D78; }
-        .fitness-stat.calendar .fitness-stat-icon { color: #00D4AA; }
+        .live-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #FF2D78;
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: livePulse 1s ease-in-out infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
 
         /* Controls */
         .controls {
@@ -469,7 +390,7 @@
             flex-wrap: wrap;
             gap: 10px;
             justify-content: center;
-            max-width: 400px;
+            max-width: 450px;
         }
 
         .control-btn {
@@ -483,7 +404,7 @@
         }
 
         .control-btn.primary {
-            background: linear-gradient(135deg, #00D4AA, #00B894);
+            background: linear-gradient(135deg, #CDFF00, #9FCC00);
             color: #0A1628;
         }
 
@@ -508,10 +429,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
-        .control-btn.active {
-            box-shadow: 0 0 0 2px #00D4AA;
-        }
-
         /* State display */
         .state-display {
             margin-top: 20px;
@@ -531,74 +448,64 @@
 
         .state-value {
             font-size: 14px;
-            color: #00D4AA;
+            color: #CDFF00;
             font-weight: 600;
         }
 
         /* AOD Mode */
         .watch-screen.aod {
-            background: radial-gradient(circle at center, #020408 0%, #000000 100%);
+            background: #000000;
+        }
+
+        .watch-screen.aod .chevron-pattern,
+        .watch-screen.aod .stadium-silhouette,
+        .watch-screen.aod .battery-arc-container {
+            opacity: 0;
         }
 
         .watch-screen.aod .cannon-crest svg path {
             fill: none !important;
-            stroke: #4A5568;
-            stroke-width: 2;
+            stroke: #333;
+            stroke-width: 1;
         }
 
-        .watch-screen.aod .time {
-            color: transparent;
-            -webkit-text-stroke: 1px #A0A8B4;
+        .watch-screen.aod .hour-marker {
+            background: #333;
         }
 
-        .watch-screen.aod .complication,
-        .watch-screen.aod .match-section,
-        .watch-screen.aod .hour-marker,
-        .watch-screen.aod .date,
-        .watch-screen.aod .seconds {
-            opacity: 0;
+        .watch-screen.aod .hand.hour,
+        .watch-screen.aod .hand.minute {
+            border-color: #555;
         }
 
-        .watch-screen.aod .aod-match-indicator {
-            display: block;
-        }
-
-        .aod-match-indicator {
+        .watch-screen.aod .hand.second {
             display: none;
-            position: absolute;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            z-index: 10;
         }
 
-        .aod-match-indicator .icon {
-            font-size: 18px;
-            color: #4A5568;
-            margin-bottom: 5px;
+        .watch-screen.aod .center-dot {
+            background: #333;
+            border-color: #555;
         }
 
-        .aod-match-indicator .text {
-            font-size: 10px;
-            color: transparent;
-            -webkit-text-stroke: 0.5px #00D4AA;
-            font-weight: 700;
-            letter-spacing: 1px;
+        .watch-screen.aod .digital-time,
+        .watch-screen.aod .day-label,
+        .watch-screen.aod .ampm {
+            color: #555;
+        }
+
+        .watch-screen.aod .steps-row {
+            color: #444;
+        }
+
+        .watch-screen.aod .date-row {
+            color: #333;
         }
 
         /* Responsive */
-        @media (max-width: 400px) {
+        @media (max-width: 420px) {
             .watch-container {
-                width: 280px;
-                height: 280px;
-            }
-            .time {
-                font-size: 44px;
-            }
-            .match-section {
-                width: 200px;
-                height: 60px;
+                width: 320px;
+                height: 320px;
             }
         }
     </style>
@@ -615,179 +522,255 @@
 
                 <!-- Away Stripe -->
                 <div class="away-stripe" id="awayStripe"></div>
-                <div class="away-indicator" id="awayIndicator">
-                    <div class="away-dot"></div>
-                    <span class="away-text">AWAY</span>
+
+                <!-- Chevron/Zigzag Pattern Background -->
+                <div class="chevron-pattern">
+                    <svg viewBox="0 0 352 352" preserveAspectRatio="xMidYMid slice">
+                        <defs>
+                            <clipPath id="circleClip">
+                                <circle cx="176" cy="176" r="176"/>
+                            </clipPath>
+                        </defs>
+                        <g clip-path="url(#circleClip)">
+                            <!-- Dark chevron shapes -->
+                            <path d="M0,200 L60,160 L120,200 L120,260 L60,220 L0,260 Z" fill="#061020"/>
+                            <path d="M80,220 L140,180 L200,220 L200,280 L140,240 L80,280 Z" fill="#061020"/>
+                            <path d="M160,200 L220,160 L280,200 L280,260 L220,220 L160,260 Z" fill="#061020"/>
+                            <path d="M240,220 L300,180 L360,220 L360,280 L300,240 L240,280 Z" fill="#061020"/>
+                            <path d="M0,280 L60,240 L120,280 L120,340 L60,300 L0,340 Z" fill="#061020"/>
+                            <path d="M80,300 L140,260 L200,300 L200,360 L140,320 L80,360 Z" fill="#061020"/>
+                            <path d="M160,280 L220,240 L280,280 L280,340 L220,300 L160,340 Z" fill="#061020"/>
+                            <path d="M240,300 L300,260 L360,300 L360,360 L300,320 L240,360 Z" fill="#061020"/>
+                            <!-- Additional upper chevrons -->
+                            <path d="M-40,240 L20,200 L80,240 L80,300 L20,260 L-40,300 Z" fill="#061020"/>
+                            <path d="M280,200 L340,160 L400,200 L400,260 L340,220 L280,260 Z" fill="#061020"/>
+                        </g>
+                    </svg>
                 </div>
 
-                <!-- Cannon Crest -->
-                <div class="cannon-crest">
-                    <svg viewBox="0 0 120 80">
-                        <path fill="#D4A853" d="M5,40 L85,30 L92,38 L92,48 L85,56 L5,46 Z"/>
-                        <path fill="#E8B87D" d="M2,38 L2,50 L8,48 L8,42 Z"/>
-                        <path fill="#D4A853" d="M100,45 m-18,0 a18,18 0,1 1,36 0 a18,18 0,1 1,-36 0"/>
-                        <path fill="#8B6914" d="M100,45 m-10,0 a10,10 0,1 1,20 0 a10,10 0,1 1,-20 0"/>
-                        <path fill="#E8B87D" d="M100,45 m-4,0 a4,4 0,1 1,8 0 a4,4 0,1 1,-8 0"/>
-                        <path fill="#8B6914" d="M78,56 L105,56 L102,70 L81,70 Z"/>
+                <!-- Emirates Stadium Silhouette -->
+                <div class="stadium-silhouette">
+                    <svg viewBox="0 0 300 50" preserveAspectRatio="xMidYMid meet">
+                        <!-- Stadium roof structure -->
+                        <path d="M0,45 L10,40 L20,35 L40,30 L60,28 L80,26 L100,25 L120,24 L140,24 L160,24 L180,24 L200,25 L220,26 L240,28 L260,30 L280,35 L290,40 L300,45"
+                              stroke="#1a2a3e" stroke-width="2" fill="none"/>
+                        <!-- Truss supports -->
+                        <line x1="30" y1="32" x2="30" y2="50" stroke="#1a2a3e" stroke-width="1"/>
+                        <line x1="60" y1="28" x2="60" y2="50" stroke="#1a2a3e" stroke-width="1"/>
+                        <line x1="90" y1="25" x2="90" y2="50" stroke="#1a2a3e" stroke-width="1"/>
+                        <line x1="120" y1="24" x2="120" y2="50" stroke="#1a2a3e" stroke-width="1"/>
+                        <line x1="150" y1="24" x2="150" y2="50" stroke="#1a2a3e" stroke-width="1"/>
+                        <line x1="180" y1="24" x2="180" y2="50" stroke="#1a2a3e" stroke-width="1"/>
+                        <line x1="210" y1="25" x2="210" y2="50" stroke="#1a2a3e" stroke-width="1"/>
+                        <line x1="240" y1="28" x2="240" y2="50" stroke="#1a2a3e" stroke-width="1"/>
+                        <line x1="270" y1="32" x2="270" y2="50" stroke="#1a2a3e" stroke-width="1"/>
+                        <!-- Cross braces -->
+                        <line x1="30" y1="35" x2="60" y2="45" stroke="#1a2a3e" stroke-width="0.5"/>
+                        <line x1="60" y1="35" x2="90" y2="45" stroke="#1a2a3e" stroke-width="0.5"/>
+                        <line x1="90" y1="32" x2="120" y2="42" stroke="#1a2a3e" stroke-width="0.5"/>
+                        <line x1="180" y1="32" x2="210" y2="42" stroke="#1a2a3e" stroke-width="0.5"/>
+                        <line x1="210" y1="35" x2="240" y2="45" stroke="#1a2a3e" stroke-width="0.5"/>
+                        <line x1="240" y1="35" x2="270" y2="45" stroke="#1a2a3e" stroke-width="0.5"/>
                     </svg>
                 </div>
 
                 <!-- Hour Markers -->
-                <div class="hour-marker top"></div>
-                <div class="hour-marker right"></div>
-                <div class="hour-marker bottom"></div>
-                <div class="hour-marker left"></div>
-
-                <!-- Time Display -->
-                <div class="time-display">
-                    <div class="time">
-                        <span id="hours">10</span><span class="colon">:</span><span id="minutes">37</span>
-                        <span class="seconds" id="seconds">24</span>
-                    </div>
-                    <div class="date" id="date">TUE 28</div>
+                <div class="hour-markers" id="hourMarkers">
+                    <!-- Generated by JavaScript -->
                 </div>
 
-                <!-- Complications -->
-                <div class="complication weather" title="Weather">
-                    <span class="complication-icon">☀️</span>
-                    <span class="complication-value">18°</span>
-                </div>
-
-                <div class="complication battery" title="Battery">
-                    <svg class="battery-arc" viewBox="0 0 46 46">
-                        <circle cx="23" cy="23" r="20" stroke="#152238" />
-                        <circle cx="23" cy="23" r="20" id="batteryArc" stroke="url(#batteryGradient)"
-                            stroke-dasharray="125.6" stroke-dashoffset="31.4" />
-                        <defs>
-                            <linearGradient id="batteryGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stop-color="#00D4AA" />
-                                <stop offset="100%" stop-color="#00FFD0" />
-                            </linearGradient>
-                        </defs>
+                <!-- Cannon Crest -->
+                <div class="cannon-crest">
+                    <svg viewBox="0 0 120 60">
+                        <!-- Cannon barrel -->
+                        <path fill="#D4A853" d="M5,25 L75,20 L80,28 L80,38 L75,46 L5,41 Z"/>
+                        <!-- Muzzle -->
+                        <path fill="#C49843" d="M2,23 L2,43 L8,41 L8,27 Z"/>
+                        <!-- Wheel -->
+                        <circle cx="95" cy="35" r="18" fill="#D4A853"/>
+                        <circle cx="95" cy="35" r="12" fill="#8B6914"/>
+                        <circle cx="95" cy="35" r="5" fill="#D4A853"/>
+                        <!-- Wheel spokes -->
+                        <line x1="95" y1="20" x2="95" y2="50" stroke="#D4A853" stroke-width="2"/>
+                        <line x1="80" y1="35" x2="110" y2="35" stroke="#D4A853" stroke-width="2"/>
+                        <line x1="84" y1="24" x2="106" y2="46" stroke="#D4A853" stroke-width="2"/>
+                        <line x1="84" y1="46" x2="106" y2="24" stroke="#D4A853" stroke-width="2"/>
                     </svg>
-                    <span class="complication-icon">🔋</span>
-                    <span class="complication-value" id="batteryValue">75%</span>
                 </div>
 
-                <div class="complication heart" title="Heart Rate">
-                    <span class="complication-icon">❤️</span>
-                    <span class="complication-value">72</span>
+                <!-- Battery Arc at 3 o'clock -->
+                <div class="battery-arc-container">
+                    <svg viewBox="0 0 50 70">
+                        <!-- Battery segments -->
+                        <g id="batterySegments" transform="translate(5, 5)">
+                            <!-- 5 segments, bottom to top -->
+                            <rect x="0" y="52" width="18" height="8" rx="2" fill="#CDFF00" class="battery-seg" data-index="0"/>
+                            <rect x="0" y="40" width="18" height="8" rx="2" fill="#CDFF00" class="battery-seg" data-index="1"/>
+                            <rect x="0" y="28" width="18" height="8" rx="2" fill="#CDFF00" class="battery-seg" data-index="2"/>
+                            <rect x="0" y="16" width="18" height="8" rx="2" fill="#CDFF00" class="battery-seg" data-index="3"/>
+                            <rect x="0" y="4" width="18" height="8" rx="2" fill="#CDFF00" class="battery-seg" data-index="4"/>
+                        </g>
+                    </svg>
                 </div>
 
-                <!-- Match Section -->
+                <!-- Clock Hands -->
+                <div class="clock-hands">
+                    <div class="hand hour" id="hourHand"></div>
+                    <div class="hand minute" id="minuteHand"></div>
+                    <div class="hand second" id="secondHand"></div>
+                </div>
+                <div class="center-dot"></div>
+
+                <!-- Bottom Info (Normal Mode) -->
+                <div class="bottom-info" id="bottomInfo">
+                    <div class="day-time-row">
+                        <span class="day-label" id="dayLabel">WED</span>
+                        <span class="digital-time" id="digitalTime">11:51:15</span>
+                        <span class="ampm" id="ampm">PM</span>
+                    </div>
+                    <div class="steps-row" id="stepsRow">12,450 STEPS</div>
+                    <div class="date-row" id="dateRow">JAN 28</div>
+                </div>
+
+                <!-- Match Section (Match Mode) -->
                 <div class="match-section" id="matchSection">
-                    <span class="match-icon" id="matchIcon">⚽</span>
-                    <div class="match-info" id="matchInfo">
-                        <div class="match-time">
-                            <span class="live-badge" id="liveBadge">LIVE</span>
-                            <span id="matchTime">17:30</span>
-                        </div>
-                        <div class="match-teams" id="matchTeams">ARS vs LIV</div>
+                    <div class="match-status" id="matchStatus">
+                        <span class="live-dot"></span>LIVE 67'
                     </div>
-                    <div class="fitness-stats" id="fitnessStats">
-                        <div class="fitness-stat steps">
-                            <div class="fitness-stat-icon">👟</div>
-                            <div class="fitness-stat-value">8,432</div>
-                            <div class="fitness-stat-label">steps</div>
-                        </div>
-                        <div class="fitness-stat hr">
-                            <div class="fitness-stat-icon">❤️</div>
-                            <div class="fitness-stat-value">72 BPM</div>
-                            <div class="fitness-stat-label"></div>
-                        </div>
-                        <div class="fitness-stat calendar">
-                            <div class="fitness-stat-icon">📅</div>
-                            <div class="fitness-stat-value">14:30</div>
-                            <div class="fitness-stat-label">Meeting</div>
-                        </div>
-                    </div>
-                    <span class="match-arrow" id="matchArrow">→</span>
-                </div>
-
-                <!-- AOD Match Indicator -->
-                <div class="aod-match-indicator">
-                    <div class="icon">⚽</div>
-                    <div class="text">MATCH TODAY</div>
+                    <div class="match-score" id="matchScore">2 - 1</div>
+                    <div class="match-teams-small">ARSENAL vs LIVERPOOL</div>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="controls">
-        <button class="control-btn primary" onclick="setState('upcoming')">Pre-Match</button>
+        <button class="control-btn primary" onclick="setState('normal')">Normal</button>
+        <button class="control-btn secondary" onclick="setState('upcoming')">Pre-Match</button>
         <button class="control-btn danger" onclick="setState('live')">LIVE</button>
         <button class="control-btn gold" onclick="setState('victory')">Victory!</button>
-        <button class="control-btn secondary" onclick="setState('noMatch')">No Match</button>
         <button class="control-btn secondary" onclick="toggleAway()">Toggle Away</button>
         <button class="control-btn secondary" onclick="toggleAOD()">AOD Mode</button>
     </div>
 
     <div class="state-display">
         <div class="state-label">Current State</div>
-        <div class="state-value" id="currentState">MATCH_UPCOMING</div>
+        <div class="state-value" id="currentState">NORMAL</div>
     </div>
 
     <script>
-        // Real-time clock
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('hours').textContent = String(now.getHours()).padStart(2, '0');
-            document.getElementById('minutes').textContent = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('seconds').textContent = String(now.getSeconds()).padStart(2, '0');
+        // Generate hour markers
+        function generateHourMarkers() {
+            const container = document.getElementById('hourMarkers');
+            const centerX = 176;
+            const centerY = 176;
+            const outerRadius = 160;
 
-            const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-            document.getElementById('date').textContent = `${days[now.getDay()]} ${now.getDate()}`;
+            for (let i = 0; i < 60; i++) {
+                const angle = (i * 6 - 90) * (Math.PI / 180);
+                const marker = document.createElement('div');
+                marker.className = 'hour-marker';
+
+                if (i % 5 === 0) {
+                    // Major markers at 12, 3, 6, 9 (indices 0, 15, 30, 45)
+                    marker.classList.add('major');
+                    const markerLength = 18;
+                    const x = centerX + (outerRadius - markerLength/2) * Math.cos(angle);
+                    const y = centerY + (outerRadius - markerLength/2) * Math.sin(angle);
+                    marker.style.left = (x - 2) + 'px';
+                    marker.style.top = (y - 9) + 'px';
+                    marker.style.transform = `rotate(${i * 6}deg)`;
+                } else {
+                    // Minor tick marks
+                    marker.classList.add('minor');
+                    const markerLength = 10;
+                    const x = centerX + (outerRadius - markerLength/2) * Math.cos(angle);
+                    const y = centerY + (outerRadius - markerLength/2) * Math.sin(angle);
+                    marker.style.left = (x - 1) + 'px';
+                    marker.style.top = (y - 5) + 'px';
+                    marker.style.transform = `rotate(${i * 6}deg)`;
+                }
+
+                container.appendChild(marker);
+            }
         }
 
-        setInterval(updateClock, 1000);
-        updateClock();
+        // Real-time clock with analog hands
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            // Analog hands
+            const hourDeg = (hours % 12) * 30 + minutes * 0.5;
+            const minuteDeg = minutes * 6 + seconds * 0.1;
+            const secondDeg = seconds * 6;
+
+            document.getElementById('hourHand').style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+            document.getElementById('minuteHand').style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
+            document.getElementById('secondHand').style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
+
+            // Digital time
+            const h = hours % 12 || 12;
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const timeStr = `${h}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            document.getElementById('digitalTime').textContent = timeStr;
+            document.getElementById('ampm').textContent = ampm;
+
+            // Day
+            const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+            document.getElementById('dayLabel').textContent = days[now.getDay()];
+
+            // Date
+            const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+            document.getElementById('dateRow').textContent = `${months[now.getMonth()]} ${now.getDate()}`;
+        }
 
         // State management
-        let currentState = 'upcoming';
+        let currentState = 'normal';
         let isAway = false;
         let isAOD = false;
 
         function setState(state) {
             currentState = state;
-            const matchInfo = document.getElementById('matchInfo');
-            const fitnessStats = document.getElementById('fitnessStats');
-            const liveBadge = document.getElementById('liveBadge');
-            const matchTime = document.getElementById('matchTime');
-            const matchTeams = document.getElementById('matchTeams');
-            const matchArrow = document.getElementById('matchArrow');
+            const bottomInfo = document.getElementById('bottomInfo');
+            const matchSection = document.getElementById('matchSection');
             const victoryGlow = document.getElementById('victoryGlow');
             const stateDisplay = document.getElementById('currentState');
+            const matchStatus = document.getElementById('matchStatus');
+            const matchScore = document.getElementById('matchScore');
 
             // Reset
-            liveBadge.classList.remove('active');
             victoryGlow.classList.remove('active');
-            matchInfo.style.display = 'block';
-            fitnessStats.classList.remove('active');
-            matchArrow.style.display = 'block';
+            bottomInfo.style.display = 'block';
+            matchSection.classList.remove('active');
 
             switch(state) {
+                case 'normal':
+                    stateDisplay.textContent = 'NORMAL';
+                    break;
                 case 'upcoming':
-                    matchTime.textContent = '17:30';
-                    matchTeams.textContent = 'ARS vs LIV';
+                    bottomInfo.style.display = 'none';
+                    matchSection.classList.add('active');
+                    matchStatus.innerHTML = 'TODAY 17:30';
+                    matchScore.textContent = 'ARS vs LIV';
                     stateDisplay.textContent = 'MATCH_UPCOMING';
                     break;
                 case 'live':
-                    liveBadge.classList.add('active');
-                    matchTime.textContent = " 67'";
-                    matchTeams.textContent = '2 - 1';
+                    bottomInfo.style.display = 'none';
+                    matchSection.classList.add('active');
+                    matchStatus.innerHTML = '<span class="live-dot"></span>LIVE 67\'';
+                    matchScore.textContent = '2 - 1';
                     stateDisplay.textContent = 'MATCH_LIVE';
                     break;
                 case 'victory':
                     victoryGlow.classList.add('active');
-                    matchTime.textContent = 'FT - WIN';
-                    matchTeams.textContent = '2 - 1';
+                    bottomInfo.style.display = 'none';
+                    matchSection.classList.add('active');
+                    matchStatus.innerHTML = 'FULL TIME';
+                    matchScore.textContent = '2 - 1 WIN!';
                     stateDisplay.textContent = 'VICTORY';
-                    break;
-                case 'noMatch':
-                    matchInfo.style.display = 'none';
-                    fitnessStats.classList.add('active');
-                    matchArrow.style.display = 'none';
-                    stateDisplay.textContent = 'NO_MATCH';
                     break;
             }
         }
@@ -795,7 +778,6 @@
         function toggleAway() {
             isAway = !isAway;
             document.getElementById('awayStripe').classList.toggle('visible', isAway);
-            document.getElementById('awayIndicator').classList.toggle('visible', isAway);
         }
 
         function toggleAOD() {
@@ -806,24 +788,26 @@
         // Battery simulation
         let battery = 75;
         function updateBattery() {
-            const arc = document.getElementById('batteryArc');
-            const value = document.getElementById('batteryValue');
-            const circumference = 125.6;
-            const offset = circumference - (battery / 100 * circumference);
-            arc.style.strokeDashoffset = offset;
-            value.textContent = battery + '%';
+            const segments = document.querySelectorAll('.battery-seg');
+            const activeSegments = Math.ceil(battery / 20);
 
-            // Update color based on level
-            const gradient = document.querySelector('#batteryGradient');
-            if (battery > 80) {
-                gradient.innerHTML = '<stop offset="0%" stop-color="#00D4AA" /><stop offset="100%" stop-color="#00FFD0" />';
-            } else if (battery > 50) {
-                gradient.innerHTML = '<stop offset="0%" stop-color="#00D4AA" /><stop offset="100%" stop-color="#D4A853" />';
-            } else if (battery > 20) {
-                gradient.innerHTML = '<stop offset="0%" stop-color="#D4A853" /><stop offset="100%" stop-color="#D4A853" />';
-            } else {
-                gradient.innerHTML = '<stop offset="0%" stop-color="#FF2D78" /><stop offset="100%" stop-color="#FF0066" />';
-            }
+            segments.forEach((seg, index) => {
+                const segIndex = parseInt(seg.dataset.index);
+                if (segIndex < activeSegments) {
+                    seg.style.opacity = '1';
+                    // Color based on battery level
+                    if (battery > 60) {
+                        seg.style.fill = '#CDFF00';
+                    } else if (battery > 30) {
+                        seg.style.fill = '#D4A853';
+                    } else {
+                        seg.style.fill = '#FF2D78';
+                    }
+                } else {
+                    seg.style.opacity = '0.2';
+                    seg.style.fill = '#333';
+                }
+            });
         }
 
         // Simulate battery drain
@@ -833,7 +817,18 @@
             updateBattery();
         }, 3000);
 
+        // Simulate step count
+        let steps = 12450;
+        setInterval(() => {
+            steps += Math.floor(Math.random() * 20);
+            document.getElementById('stepsRow').textContent = steps.toLocaleString() + ' STEPS';
+        }, 5000);
+
+        // Initialize
+        generateHourMarkers();
+        updateClock();
         updateBattery();
+        setInterval(updateClock, 1000);
     </script>
 </body>
 </html>
