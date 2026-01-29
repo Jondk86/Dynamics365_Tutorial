@@ -1,0 +1,1708 @@
+# Arsenal FC 2025/26 Watch Face - Complete Project Code
+# Copy each section into the corresponding file in Android Studio
+
+================================================================================
+## PROJECT SETUP INSTRUCTIONS
+================================================================================
+
+1. In Android Studio, create a new "Wear OS" project:
+   - File > New > New Project > Wear OS > Empty Wear App
+   - Name: ArsenalWatchFace
+   - Package: com.arsenal.watchface
+   - Min SDK: API 30
+
+2. Create the following directory structure:
+   app/src/main/
+   ├── kotlin/com/arsenal/watchface/
+   │   ├── complications/
+   │   ├── data/
+   │   └── utils/
+   └── res/
+       ├── drawable/
+       ├── drawable-nodpi/
+       ├── font/
+       ├── raw/
+       ├── values/
+       └── xml/
+
+3. Copy each file's content below into the corresponding path.
+
+================================================================================
+## FILE: settings.gradle.kts
+================================================================================
+
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "ArsenalWatchFace"
+include(":app")
+
+================================================================================
+## FILE: build.gradle.kts (Project root)
+================================================================================
+
+plugins {
+    id("com.android.application") version "8.2.0" apply false
+    id("org.jetbrains.kotlin.android") version "1.9.20" apply false
+}
+
+================================================================================
+## FILE: gradle.properties
+================================================================================
+
+org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+android.useAndroidX=true
+kotlin.code.style=official
+android.nonTransitiveRClass=true
+
+================================================================================
+## FILE: app/build.gradle.kts
+================================================================================
+
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
+
+android {
+    namespace = "com.arsenal.watchface"
+    compileSdk = 34
+
+    defaultConfig {
+        applicationId = "com.arsenal.watchface"
+        minSdk = 30
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0.0"
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+        debug {
+            isMinifyEnabled = false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+}
+
+dependencies {
+    // Wear OS
+    implementation("androidx.wear:wear:1.3.0")
+    implementation("androidx.wear.watchface:watchface:1.2.1")
+    implementation("androidx.wear.watchface:watchface-complications-data:1.2.1")
+    implementation("androidx.wear.watchface:watchface-complications-data-source:1.2.1")
+    implementation("androidx.wear.watchface:watchface-complications-rendering:1.2.1")
+    implementation("androidx.wear.watchface:watchface-complications-data-source-ktx:1.2.1")
+
+    // Play Services for Wearable Data Layer
+    implementation("com.google.android.gms:play-services-wearable:18.1.0")
+
+    // Kotlin Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+
+    // AndroidX
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+}
+
+================================================================================
+## FILE: app/proguard-rules.pro
+================================================================================
+
+-keep class com.arsenal.watchface.** { *; }
+-keep class androidx.wear.watchface.** { *; }
+
+================================================================================
+## FILE: app/src/main/AndroidManifest.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-feature android:name="android.hardware.type.watch" />
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.google.android.permission.PROVIDE_BACKGROUND" />
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.DeviceDefault">
+
+        <service
+            android:name="androidx.wear.watchface.WatchFaceService"
+            android:directBootAware="true"
+            android:exported="true"
+            android:label="@string/watch_face_name"
+            android:permission="android.permission.BIND_WALLPAPER">
+
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="com.google.android.wearable.watchface.wffVersion"
+                android:value="2" />
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/watch_face_info" />
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview"
+                android:resource="@drawable/preview_watchface" />
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview_circular"
+                android:resource="@drawable/preview_watchface" />
+            <meta-data
+                android:name="com.google.android.wearable.watchface.companionBuiltinConfigurationEnabled"
+                android:value="true" />
+        </service>
+
+        <service
+            android:name=".complications.ArsenalMatchDataSource"
+            android:exported="true"
+            android:icon="@drawable/ic_complication_match"
+            android:label="@string/complication_match_label"
+            android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
+
+            <intent-filter>
+                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.wearable.complications.SUPPORTED_TYPES"
+                android:value="LONG_TEXT,SHORT_TEXT" />
+            <meta-data
+                android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
+                android:value="900" />
+        </service>
+
+        <service
+            android:name=".data.FirebaseMatchService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <data android:host="*" android:pathPrefix="/arsenal/match" android:scheme="wear" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+                <data android:host="*" android:path="/arsenal/match" android:scheme="wear" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name=".utils.BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+</manifest>
+
+================================================================================
+## FILE: app/src/main/res/values/colors.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Background Colors -->
+    <color name="deep_midnight_navy">#0A1628</color>
+    <color name="arsenal_navy_dark">#061020</color>
+    <color name="midnight_shadow">#152238</color>
+
+    <!-- Accent Colors -->
+    <color name="vibrant_aqua">#00D4AA</color>
+    <color name="electric_aqua">#00FFD0</color>
+    <color name="pink_neon">#FF2D78</color>
+    <color name="hot_pink">#FF0066</color>
+
+    <!-- Metallic Accents -->
+    <color name="cannon_gold">#D4A853</color>
+    <color name="copper_highlight">#E8B87D</color>
+    <color name="bronze_shadow">#8B6914</color>
+
+    <!-- Utility Colors -->
+    <color name="pure_white">#FFFFFF</color>
+    <color name="silver_grey">#A0A8B4</color>
+    <color name="dim_grey">#4A5568</color>
+
+    <!-- AOD Colors -->
+    <color name="aod_background">#000000</color>
+    <color name="aod_subtle_gradient">#020408</color>
+</resources>
+
+================================================================================
+## FILE: app/src/main/res/values/strings.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Arsenal 25/26</string>
+    <string name="watch_face_name">Arsenal 25/26 Third Kit</string>
+    <string name="watch_face_description">Premium watch face inspired by Arsenal FC 2025/26 Third Kit</string>
+    <string name="complication_match_label">Arsenal Match</string>
+    <string name="complication_match_description">Shows Arsenal FC match information</string>
+
+    <string name="label_steps">STEPS</string>
+    <string name="label_heart_rate">HR</string>
+    <string name="label_battery">BAT</string>
+    <string name="label_bpm">BPM</string>
+
+    <string name="match_day">MATCH DAY</string>
+    <string name="kick_off">KICK-OFF</string>
+    <string name="live">LIVE</string>
+    <string name="half_time">HT</string>
+    <string name="full_time">FT</string>
+    <string name="postponed">POSTPONED</string>
+    <string name="vs">vs</string>
+    <string name="match_today">MATCH TODAY</string>
+    <string name="away">AWAY</string>
+    <string name="home">HOME</string>
+
+    <string name="result_win">WIN</string>
+    <string name="result_draw">DRAW</string>
+    <string name="result_loss">LOSS</string>
+
+    <string name="config_match_audio">Match Day Audio</string>
+    <string name="config_victory_glow">Victory Glow</string>
+
+    <string name="alert_kickoff_title">Kick-Off!</string>
+    <string name="alert_kickoff_message">The match has started!</string>
+    <string name="alert_goal_title">GOOOAL!</string>
+    <string name="alert_goal_message">%1$s scores for Arsenal!</string>
+    <string name="alert_victory_title">Victory!</string>
+    <string name="alert_victory_message">Arsenal win %1$s! COYG!</string>
+
+    <string name="notification_channel_name">Arsenal Match Alerts</string>
+
+    <string name="loading">Loading…</string>
+    <string name="no_data">No data</string>
+</resources>
+
+================================================================================
+## FILE: app/src/main/res/xml/watch_face_info.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<wallpaper
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:thumbnail="@drawable/preview_watchface"
+    android:description="@string/watch_face_description" />
+
+================================================================================
+## FILE: app/src/main/res/raw/watchface.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<WatchFace width="450" height="450">
+
+    <UserConfigurations>
+        <BooleanConfiguration
+            id="show_seconds"
+            displayName="Show Seconds"
+            defaultValue="false" />
+        <ListConfiguration
+            id="accent_color"
+            displayName="Accent Color"
+            defaultValue="aqua">
+            <ListOption id="aqua" displayName="Vibrant Aqua" />
+            <ListOption id="pink" displayName="Pink Neon" />
+            <ListOption id="gold" displayName="Cannon Gold" />
+        </ListConfiguration>
+        <BooleanConfiguration
+            id="match_audio_enabled"
+            displayName="Match Day Audio"
+            defaultValue="true" />
+        <BooleanConfiguration
+            id="victory_glow_enabled"
+            displayName="Victory Glow"
+            defaultValue="true" />
+    </UserConfigurations>
+
+    <Scene>
+        <!-- Background -->
+        <PartImage x="0" y="0" width="450" height="450">
+            <Image resource="bg_watchface" />
+        </PartImage>
+
+        <!-- Home/Away Visual Cue -->
+        <Condition>
+            <Expressions>
+                <Expression name="isAway">[COMPLICATION.3.CONTENT_DESCRIPTION] == "AWAY"</Expression>
+            </Expressions>
+            <Compare expression="isAway" value="true">
+                <PartDraw x="0" y="0" width="8" height="450">
+                    <Rectangle width="8" height="450">
+                        <Fill>
+                            <Gradient type="LINEAR" startX="0" startY="0" endX="0" endY="450">
+                                <GradientColor color="#00000000" position="0" />
+                                <GradientColor color="#E8B87D" position="0.3" />
+                                <GradientColor color="#E8B87D" position="0.7" />
+                                <GradientColor color="#00000000" position="1" />
+                            </Gradient>
+                        </Fill>
+                    </Rectangle>
+                </PartDraw>
+                <PartText x="15" y="417" width="50" height="14">
+                    <Text align="LEFT" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="10" weight="MEDIUM">AWAY</Font>
+                        <Color color="#E8B87D" />
+                    </Text>
+                </PartText>
+            </Compare>
+        </Condition>
+
+        <!-- Victory Glow Animation -->
+        <Condition>
+            <Expressions>
+                <Expression name="victoryGlow">[COMPLICATION.3.CONTENT_DESCRIPTION] == "VICTORY"</Expression>
+                <Expression name="glowEnabled">[CONFIGURATION.victory_glow_enabled]</Expression>
+            </Expressions>
+            <Compare expression="victoryGlow" value="true">
+                <Compare expression="glowEnabled" value="true">
+                    <PartDraw x="0" y="0" width="450" height="450">
+                        <Ellipse width="450" height="450" centerX="225" centerY="225">
+                            <Stroke thickness="4">
+                                <Gradient type="SWEEP">
+                                    <GradientColor color="#FF2D78" position="0" />
+                                    <GradientColor color="#FF0066" position="0.5" />
+                                    <GradientColor color="#FF2D78" position="1" />
+                                </Gradient>
+                            </Stroke>
+                        </Ellipse>
+                        <Animation target="alpha" from="255" to="128" duration="1000"
+                            repeatMode="REVERSE" repeatCount="INFINITE" />
+                    </PartDraw>
+                </Compare>
+            </Compare>
+        </Condition>
+
+        <!-- Cannon Crest -->
+        <PartImage x="195" y="35" width="60" height="40" alpha="255">
+            <Image resource="cannon_crest" />
+        </PartImage>
+
+        <!-- Hour Index Markers -->
+        <PartDraw x="222" y="85" width="6" height="15">
+            <RoundRectangle width="6" height="15" cornerRadius="3">
+                <Fill color="#D4A853" />
+            </RoundRectangle>
+        </PartDraw>
+        <PartDraw x="350" y="222" width="15" height="6">
+            <RoundRectangle width="15" height="6" cornerRadius="3">
+                <Fill color="#D4A853" />
+            </RoundRectangle>
+        </PartDraw>
+        <PartDraw x="222" y="350" width="6" height="15">
+            <RoundRectangle width="6" height="15" cornerRadius="3">
+                <Fill color="#D4A853" />
+            </RoundRectangle>
+        </PartDraw>
+        <PartDraw x="85" y="222" width="15" height="6">
+            <RoundRectangle width="15" height="6" cornerRadius="3">
+                <Fill color="#D4A853" />
+            </RoundRectangle>
+        </PartDraw>
+
+        <!-- Time Display -->
+        <PartText x="85" y="185" width="130" height="80">
+            <Text align="RIGHT" maxLines="1">
+                <Font family="SYNC_TO_DEVICE" size="72" weight="BOLD">
+                    <Template>%02d<Parameter expression="[HOUR_0_23]" /></Template>
+                </Font>
+                <Variant mode="AMBIENT">
+                    <Outline color="#A0A8B4" width="1" />
+                    <Color color="#00000000" />
+                </Variant>
+                <Color color="#FFFFFF" />
+            </Text>
+        </PartText>
+
+        <PartText x="215" y="185" width="20" height="80">
+            <Text align="CENTER" maxLines="1">
+                <Font family="SYNC_TO_DEVICE" size="72" weight="BOLD">:</Font>
+                <Variant mode="AMBIENT">
+                    <Outline color="#A0A8B4" width="1" />
+                    <Color color="#00000000" />
+                </Variant>
+                <Color color="#FFFFFF" />
+            </Text>
+        </PartText>
+
+        <PartText x="235" y="185" width="130" height="80">
+            <Text align="LEFT" maxLines="1">
+                <Font family="SYNC_TO_DEVICE" size="72" weight="BOLD">
+                    <Template>%02d<Parameter expression="[MINUTE]" /></Template>
+                </Font>
+                <Variant mode="AMBIENT">
+                    <Outline color="#A0A8B4" width="1" />
+                    <Color color="#00000000" />
+                </Variant>
+                <Color color="#FFFFFF" />
+            </Text>
+        </PartText>
+
+        <!-- Seconds (conditional) -->
+        <Condition>
+            <Expressions>
+                <Expression name="showSec">[CONFIGURATION.show_seconds]</Expression>
+            </Expressions>
+            <Compare expression="showSec" value="true">
+                <PartText x="325" y="230" width="50" height="35">
+                    <Text align="LEFT" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="24" weight="MEDIUM">
+                            <Template>%02d<Parameter expression="[SECOND]" /></Template>
+                        </Font>
+                        <Color color="#00D4AA" />
+                    </Text>
+                </PartText>
+            </Compare>
+        </Condition>
+
+        <!-- Date -->
+        <PartText x="175" y="265" width="100" height="25">
+            <Text align="CENTER" maxLines="1">
+                <Font family="SYNC_TO_DEVICE" size="14" weight="MEDIUM">
+                    <Template>
+                        <Parameter expression="[DAY_OF_WEEK_S]" /> <Parameter expression="[DAY_OF_MONTH]" />
+                    </Template>
+                </Font>
+                <Variant mode="AMBIENT"><Color color="#4A5568" /></Variant>
+                <Color color="#A0A8B4" />
+            </Text>
+        </PartText>
+
+        <!-- Weather Complication -->
+        <ComplicationSlot
+            slotId="0" name="weather" displayName="Weather"
+            supportedTypes="SHORT_TEXT,RANGED_VALUE,SMALL_IMAGE"
+            defaultType="SHORT_TEXT" defaultProviderType="WEATHER"
+            x="65" y="120" width="50" height="50">
+            <BoundingCircle x="25" y="25" r="25" />
+            <Complication type="SHORT_TEXT">
+                <PartImage x="0" y="0" width="50" height="50">
+                    <Image resource="bg_complication_slot" />
+                </PartImage>
+                <PartImage x="16" y="8" width="18" height="18">
+                    <Image resource="ic_weather_clear" />
+                </PartImage>
+                <PartText x="0" y="28" width="50" height="18">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="14" weight="BOLD" />
+                        <Color color="#FFFFFF" />
+                    </Text>
+                </PartText>
+            </Complication>
+        </ComplicationSlot>
+
+        <!-- Battery Complication with Dynamic Gradient -->
+        <ComplicationSlot
+            slotId="1" name="battery" displayName="Battery"
+            supportedTypes="SHORT_TEXT,RANGED_VALUE"
+            defaultType="RANGED_VALUE" defaultProviderType="BATTERY"
+            x="335" y="120" width="50" height="50">
+            <BoundingCircle x="25" y="25" r="25" />
+            <Complication type="RANGED_VALUE">
+                <PartImage x="0" y="0" width="50" height="50">
+                    <Image resource="bg_complication_slot" />
+                </PartImage>
+                <Condition>
+                    <Expressions>
+                        <Expression name="batteryLevel">[COMPLICATION.RANGED_VALUE_VALUE]</Expression>
+                    </Expressions>
+                    <Compare expression="batteryLevel > 80">
+                        <PartDraw x="0" y="0" width="50" height="50">
+                            <Arc centerX="25" centerY="25" startAngle="-90"
+                                sweepAngle="[COMPLICATION.RANGED_VALUE_VALUE / COMPLICATION.RANGED_VALUE_MAX * 360]">
+                                <Stroke cap="ROUND" thickness="3">
+                                    <Gradient type="SWEEP">
+                                        <GradientColor color="#00D4AA" position="0" />
+                                        <GradientColor color="#00FFD0" position="1" />
+                                    </Gradient>
+                                </Stroke>
+                            </Arc>
+                        </PartDraw>
+                        <PartImage x="16" y="8" width="18" height="18">
+                            <Image resource="ic_battery_aqua" />
+                        </PartImage>
+                    </Compare>
+                    <Compare expression="batteryLevel > 50">
+                        <Compare expression="batteryLevel <= 80">
+                            <PartDraw x="0" y="0" width="50" height="50">
+                                <Arc centerX="25" centerY="25" startAngle="-90"
+                                    sweepAngle="[COMPLICATION.RANGED_VALUE_VALUE / COMPLICATION.RANGED_VALUE_MAX * 360]">
+                                    <Stroke cap="ROUND" thickness="3">
+                                        <Gradient type="SWEEP">
+                                            <GradientColor color="#00D4AA" position="0" />
+                                            <GradientColor color="#D4A853" position="1" />
+                                        </Gradient>
+                                    </Stroke>
+                                </Arc>
+                            </PartDraw>
+                            <PartImage x="16" y="8" width="18" height="18">
+                                <Image resource="ic_battery_gold" />
+                            </PartImage>
+                        </Compare>
+                    </Compare>
+                    <Compare expression="batteryLevel > 20">
+                        <Compare expression="batteryLevel <= 50">
+                            <PartDraw x="0" y="0" width="50" height="50">
+                                <Arc centerX="25" centerY="25" startAngle="-90"
+                                    sweepAngle="[COMPLICATION.RANGED_VALUE_VALUE / COMPLICATION.RANGED_VALUE_MAX * 360]">
+                                    <Stroke color="#D4A853" cap="ROUND" thickness="3" />
+                                </Arc>
+                            </PartDraw>
+                            <PartImage x="16" y="8" width="18" height="18">
+                                <Image resource="ic_battery_gold" />
+                            </PartImage>
+                        </Compare>
+                    </Compare>
+                    <Compare expression="batteryLevel <= 20">
+                        <PartDraw x="0" y="0" width="50" height="50">
+                            <Arc centerX="25" centerY="25" startAngle="-90"
+                                sweepAngle="[COMPLICATION.RANGED_VALUE_VALUE / COMPLICATION.RANGED_VALUE_MAX * 360]">
+                                <Stroke cap="ROUND" thickness="3">
+                                    <Gradient type="SWEEP">
+                                        <GradientColor color="#FF2D78" position="0" />
+                                        <GradientColor color="#FF0066" position="1" />
+                                    </Gradient>
+                                </Stroke>
+                            </Arc>
+                            <Animation target="alpha" from="255" to="180" duration="800"
+                                repeatMode="REVERSE" repeatCount="INFINITE" />
+                        </PartDraw>
+                        <PartImage x="16" y="8" width="18" height="18">
+                            <Image resource="ic_battery_pink" />
+                        </PartImage>
+                    </Compare>
+                    <Default>
+                        <PartDraw x="0" y="0" width="50" height="50">
+                            <Arc centerX="25" centerY="25" startAngle="-90"
+                                sweepAngle="[COMPLICATION.RANGED_VALUE_VALUE / COMPLICATION.RANGED_VALUE_MAX * 360]">
+                                <Stroke color="#00D4AA" cap="ROUND" thickness="3" />
+                            </Arc>
+                        </PartDraw>
+                        <PartImage x="16" y="8" width="18" height="18">
+                            <Image resource="ic_battery" />
+                        </PartImage>
+                    </Default>
+                </Condition>
+                <PartText x="0" y="28" width="50" height="18">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="12" weight="BOLD">
+                            <Template><Parameter expression="[COMPLICATION.RANGED_VALUE_VALUE]" />%</Template>
+                        </Font>
+                        <Color color="#FFFFFF" />
+                    </Text>
+                </PartText>
+            </Complication>
+        </ComplicationSlot>
+
+        <!-- Heart Rate Complication -->
+        <ComplicationSlot
+            slotId="2" name="heart_rate" displayName="Heart Rate"
+            supportedTypes="SHORT_TEXT,RANGED_VALUE"
+            defaultType="SHORT_TEXT" defaultProviderType="HEART_RATE"
+            x="65" y="280" width="50" height="50">
+            <BoundingCircle x="25" y="25" r="25" />
+            <Complication type="SHORT_TEXT">
+                <PartImage x="0" y="0" width="50" height="50">
+                    <Image resource="bg_complication_slot" />
+                </PartImage>
+                <PartImage x="16" y="8" width="18" height="18">
+                    <Image resource="ic_heart" />
+                </PartImage>
+                <PartText x="0" y="28" width="50" height="18">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="12" weight="BOLD" />
+                        <Color color="#FF2D78" />
+                    </Text>
+                </PartText>
+            </Complication>
+        </ComplicationSlot>
+
+        <!-- Match Section Background -->
+        <PartImage x="65" y="335" width="320" height="100">
+            <Image resource="bg_match_section" />
+        </PartImage>
+
+        <!-- Match Day Complication -->
+        <ComplicationSlot
+            slotId="3" name="match_data" displayName="Arsenal Match"
+            supportedTypes="LONG_TEXT,SHORT_TEXT,NO_DATA"
+            defaultType="LONG_TEXT"
+            x="75" y="345" width="300" height="80">
+            <BoundingOval x="0" y="0" width="300" height="80" />
+
+            <Complication type="LONG_TEXT">
+                <TapAction>
+                    <Launch intent="com.arsenal.mobile" fallback="com.google.android.calendar" />
+                </TapAction>
+                <PartImage x="10" y="30" width="24" height="24">
+                    <ImageReference expression="[COMPLICATION.MONOCHROMATIC_IMAGE]" />
+                </PartImage>
+                <PartText x="45" y="15" width="100" height="20">
+                    <Text align="LEFT" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="12" weight="BOLD" />
+                        <Color color="#00D4AA" />
+                    </Text>
+                </PartText>
+                <PartText x="45" y="38" width="245" height="30">
+                    <Text align="LEFT" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="18" weight="BOLD" />
+                        <Color color="#FFFFFF" />
+                    </Text>
+                </PartText>
+                <PartText x="270" y="35" width="20" height="20">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="14" weight="BOLD">→</Font>
+                        <Color color="#4A5568" />
+                    </Text>
+                </PartText>
+            </Complication>
+
+            <Complication type="NO_DATA">
+                <Group>
+                    <TapAction><Launch intent="com.samsung.android.health" /></TapAction>
+                    <PartImage x="10" y="15" width="18" height="18">
+                        <Image resource="ic_steps" />
+                    </PartImage>
+                    <PartText x="10" y="35" width="80" height="20">
+                        <Text align="LEFT" maxLines="1">
+                            <Font family="SYNC_TO_DEVICE" size="14" weight="BOLD">
+                                <Template><Parameter expression="[STEP_COUNT]" /></Template>
+                            </Font>
+                            <Color color="#FFFFFF" />
+                        </Text>
+                    </PartText>
+                    <PartText x="10" y="55" width="60" height="15">
+                        <Text align="LEFT" maxLines="1">
+                            <Font family="SYNC_TO_DEVICE" size="10" weight="MEDIUM">steps</Font>
+                            <Color color="#A0A8B4" />
+                        </Text>
+                    </PartText>
+                </Group>
+                <PartDraw x="100" y="20" width="1" height="45">
+                    <Rectangle width="1" height="45"><Fill color="#4A5568" /></Rectangle>
+                </PartDraw>
+                <Group>
+                    <TapAction><Launch intent="com.samsung.android.health" /></TapAction>
+                    <PartImage x="115" y="15" width="18" height="18">
+                        <Image resource="ic_heart" />
+                    </PartImage>
+                    <PartText x="115" y="35" width="80" height="20">
+                        <Text align="LEFT" maxLines="1">
+                            <Font family="SYNC_TO_DEVICE" size="14" weight="BOLD">
+                                <Template><Parameter expression="[HEART_RATE]" /> BPM</Template>
+                            </Font>
+                            <Color color="#FF2D78" />
+                        </Text>
+                    </PartText>
+                </Group>
+                <PartDraw x="200" y="20" width="1" height="45">
+                    <Rectangle width="1" height="45"><Fill color="#4A5568" /></Rectangle>
+                </PartDraw>
+                <Group>
+                    <TapAction><Launch intent="com.google.android.calendar" /></TapAction>
+                    <PartImage x="215" y="15" width="18" height="18">
+                        <Image resource="ic_calendar" />
+                    </PartImage>
+                    <PartText x="215" y="35" width="75" height="35">
+                        <Text align="LEFT" maxLines="2">
+                            <Font family="SYNC_TO_DEVICE" size="11" weight="MEDIUM" />
+                            <Color color="#A0A8B4" />
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+        </ComplicationSlot>
+    </Scene>
+
+    <!-- AOD Scene -->
+    <Scene mode="AMBIENT">
+        <PartDraw x="0" y="0" width="450" height="450">
+            <Rectangle width="450" height="450">
+                <Fill>
+                    <Gradient type="RADIAL" centerX="225" centerY="225" radius="320">
+                        <GradientColor color="#020408" position="0" />
+                        <GradientColor color="#000000" position="1" />
+                    </Gradient>
+                </Fill>
+            </Rectangle>
+        </PartDraw>
+
+        <PartImage x="195" y="55" width="60" height="40" alpha="255">
+            <Image resource="cannon_crest_outline" />
+            <BurnInProtection shiftPixels="5" shiftIntervalMs="60000" shiftMode="RANDOM" />
+        </PartImage>
+
+        <PartText x="85" y="200" width="280" height="80">
+            <Text align="CENTER" maxLines="1">
+                <Font family="SYNC_TO_DEVICE" size="72" weight="BOLD">
+                    <Template><Parameter expression="[HOUR_0_23]" />:<Parameter expression="[MINUTE]" /></Template>
+                </Font>
+                <Outline color="#A0A8B4" width="1" />
+                <Color color="#00000000" />
+            </Text>
+            <BurnInProtection shiftPixels="4" shiftIntervalMs="60000" shiftMode="RANDOM" />
+        </PartText>
+
+        <Condition>
+            <Expressions>
+                <Expression name="hasMatch">[COMPLICATION.3.TYPE != NO_DATA]</Expression>
+            </Expressions>
+            <Compare expression="hasMatch" value="true">
+                <PartImage x="213" y="310" width="24" height="24" alpha="102">
+                    <Image resource="ic_football_outline" />
+                    <BurnInProtection shiftPixels="3" shiftIntervalMs="60000" shiftMode="RANDOM" />
+                </PartImage>
+                <PartText x="150" y="340" width="150" height="20">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="12" weight="BOLD">MATCH TODAY</Font>
+                        <Outline color="#00D4AA" width="1" />
+                        <Color color="#00000000" />
+                    </Text>
+                    <BurnInProtection shiftPixels="3" shiftIntervalMs="60000" shiftMode="RANDOM" />
+                </PartText>
+            </Compare>
+        </Condition>
+    </Scene>
+
+    <Metadata preview="preview_watchface" wallpaperInteractive="true" />
+</WatchFace>
+
+================================================================================
+## FILE: app/src/main/res/drawable/bg_watchface.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:centerX="0.5"
+                android:centerY="0.3"
+                android:gradientRadius="225"
+                android:startColor="#152238"
+                android:centerColor="#0A1628"
+                android:endColor="#061020" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="200"
+                android:startColor="#00000000"
+                android:endColor="#66000000" />
+        </shape>
+    </item>
+</layer-list>
+
+================================================================================
+## FILE: app/src/main/res/drawable/bg_complication_slot.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="#CC0A1628" />
+    <stroke android:width="1dp" android:color="#4D00D4AA" />
+    <size android:width="50dp" android:height="50dp" />
+</shape>
+
+================================================================================
+## FILE: app/src/main/res/drawable/bg_match_section.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#E60A1628" />
+    <stroke android:width="1dp" android:color="#4D00D4AA" />
+    <corners android:radius="15dp" />
+</shape>
+
+================================================================================
+## FILE: app/src/main/res/drawable/cannon_crest.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="60dp"
+    android:height="40dp"
+    android:viewportWidth="120"
+    android:viewportHeight="80">
+    <!-- Cannon barrel -->
+    <path
+        android:fillColor="#D4A853"
+        android:pathData="M5,40 L85,30 L92,38 L92,48 L85,56 L5,46 Z" />
+    <!-- Muzzle -->
+    <path
+        android:fillColor="#E8B87D"
+        android:pathData="M2,38 L2,50 L8,48 L8,42 Z" />
+    <!-- Cannon wheel -->
+    <path
+        android:fillColor="#D4A853"
+        android:pathData="M100,45 m-18,0 a18,18 0,1 1,36 0 a18,18 0,1 1,-36 0" />
+    <!-- Wheel inner -->
+    <path
+        android:fillColor="#8B6914"
+        android:pathData="M100,45 m-10,0 a10,10 0,1 1,20 0 a10,10 0,1 1,-20 0" />
+    <!-- Wheel hub -->
+    <path
+        android:fillColor="#E8B87D"
+        android:pathData="M100,45 m-4,0 a4,4 0,1 1,8 0 a4,4 0,1 1,-8 0" />
+    <!-- Carriage -->
+    <path
+        android:fillColor="#8B6914"
+        android:pathData="M78,56 L105,56 L102,70 L81,70 Z" />
+</vector>
+
+================================================================================
+## FILE: app/src/main/res/drawable/cannon_crest_outline.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="60dp"
+    android:height="40dp"
+    android:viewportWidth="120"
+    android:viewportHeight="80">
+    <path
+        android:strokeColor="#4A5568"
+        android:strokeWidth="2"
+        android:fillColor="#00000000"
+        android:pathData="M5,40 L85,30 L92,38 L92,48 L85,56 L5,46 Z" />
+    <path
+        android:strokeColor="#4A5568"
+        android:strokeWidth="2"
+        android:fillColor="#00000000"
+        android:pathData="M2,38 L2,50 L8,48 L8,42 Z" />
+    <path
+        android:strokeColor="#4A5568"
+        android:strokeWidth="2"
+        android:fillColor="#00000000"
+        android:pathData="M100,45 m-18,0 a18,18 0,1 1,36 0 a18,18 0,1 1,-36 0" />
+    <path
+        android:strokeColor="#4A5568"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M100,45 m-10,0 a10,10 0,1 1,20 0 a10,10 0,1 1,-20 0" />
+    <path
+        android:strokeColor="#4A5568"
+        android:strokeWidth="2"
+        android:fillColor="#00000000"
+        android:pathData="M78,56 L105,56 L102,70 L81,70 Z" />
+</vector>
+
+================================================================================
+## FILE: app/src/main/res/drawable/ic_launcher.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path android:fillColor="#0A1628"
+        android:pathData="M24,24m-24,0a24,24 0,1 1,48 0a24,24 0,1 1,-48 0"/>
+    <path android:fillColor="#D4A853"
+        android:pathData="M10,24 L34,20 L36,24 L36,28 L34,32 L10,28 Z"/>
+    <path android:fillColor="#D4A853"
+        android:pathData="M38,26 m-6,0 a6,6 0,1 1,12 0 a6,6 0,1 1,-12 0"/>
+</vector>
+
+================================================================================
+## FILE: app/src/main/res/drawable/ic_complication_match.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path android:fillColor="#0A1628"
+        android:pathData="M12,1 L3,5 L3,11 C3,16.55 6.84,21.74 12,23 C17.16,21.74 21,16.55 21,11 L21,5 L12,1 Z"/>
+    <path android:fillColor="#D4A853"
+        android:pathData="M7,12 L15,10 L16,12 L16,14 L15,16 L7,14 Z"/>
+    <path android:fillColor="#D4A853"
+        android:pathData="M17,13 m-3,0 a3,3 0,1 1,6 0 a3,3 0,1 1,-6 0"/>
+    <path android:strokeColor="#00D4AA" android:strokeWidth="1" android:fillColor="#00000000"
+        android:pathData="M12,2 L4,5.5 L4,11 C4,16 7.4,20.5 12,21.8 C16.6,20.5 20,16 20,11 L20,5.5 L12,2 Z"/>
+</vector>
+
+================================================================================
+## FILE: app/src/main/res/drawable/ic_heart.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path android:fillColor="#FF2D78"
+        android:pathData="M12,21.35l-1.45,-1.32C5.4,15.36 2,12.28 2,8.5 2,5.42 4.42,3 7.5,3c1.74,0 3.41,0.81 4.5,2.09C13.09,3.81 14.76,3 16.5,3 19.58,3 22,5.42 22,8.5c0,3.78 -3.4,6.86 -8.55,11.54L12,21.35z"/>
+</vector>
+
+================================================================================
+## FILE: app/src/main/res/drawable/ic_steps.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path android:fillColor="#00D4AA"
+        android:pathData="M13.5,5.5c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM9.8,8.9L7,23h2.1l1.8,-8 2.1,2v6h2v-7.5l-2.1,-2 0.6,-3C14.8,12 16.8,13 19,13v-2c-1.9,0 -3.5,-1 -4.3,-2.4l-1,-1.6c-0.4,-0.6 -1,-1 -1.7,-1 -0.3,0 -0.5,0.1 -0.8,0.1L6,8.3V13h2V9.6l1.8,-0.7"/>
+</vector>
+
+================================================================================
+## FILE: app/src/main/res/drawable/ic_calendar.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path android:fillColor="#00D4AA"
+        android:pathData="M19,4h-1V2h-2v2H8V2H6v2H5c-1.11,0 -1.99,0.9 -1.99,2L3,20c0,1.1 0.89,2 2,2h14c1.1,0 2,-0.9 2,-2V6c0,-1.1 -0.9,-2 -2,-2zM19,20H5V9h14v11zM7,11h5v5H7z"/>
+</vector>
+
+================================================================================
+## FILE: app/src/main/res/drawable/ic_battery.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path android:fillColor="#00D4AA"
+        android:pathData="M15.67,4H14V2h-4v2H8.33C7.6,4 7,4.6 7,5.33v15.33C7,21.4 7.6,22 8.33,22h7.33c0.74,0 1.34,-0.6 1.34,-1.33V5.33C17,4.6 16.4,4 15.67,4z"/>
+</vector>
+
+================================================================================
+## FILE: app/src/main/res/drawable/ic_battery_aqua.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path android:fillColor="#00D4AA"
+        android:pathData="M15.67,4H14V2h-4v2H8.33C7.6,4 7,4.6 7,5.33v15.33C7,21.4 7.6,22 8.33,22h7.33c0.74,0 1.34,-0.6 1.34,-1.33V5.33C17,4.6 16.4,4 15.67,4z"/>
+</vector>
+
+================================================================================
+## FILE: app/src/main/res/drawable/ic_battery_gold.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path android:fillColor="#D4A853"
+        android:pathData="M15.67,4H14V2h-4v2H8.33C7.6,4 7,4.6 7,5.33v15.33C7,21.4 7.6,22 8.33,22h7.33c0.74,0 1.34,-0.6 1.34,-1.33V5.33C17,4.6 16.4,4 15.67,4z"/>
+</vector>
+
+================================================================================
+## FILE: app/src/main/res/drawable/ic_battery_pink.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path android:fillColor="#FF2D78"
+        android:pathData="M15.67,4H14V2h-4v2H8.33C7.6,4 7,4.6 7,5.33v15.33C7,21.4 7.6,22 8.33,22h7.33c0.74,0 1.34,-0.6 1.34,-1.33V5.33C17,4.6 16.4,4 15.67,4z"/>
+</vector>
+
+================================================================================
+## FILE: app/src/main/res/drawable/ic_weather_clear.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path android:fillColor="#00D4AA"
+        android:pathData="M6.76,4.84l-1.8,-1.79 -1.41,1.41 1.79,1.79 1.42,-1.41zM4,10.5H1v2h3v-2zM13,0.55h-2V3.5h2V0.55zM20.45,4.46l-1.41,-1.41 -1.79,1.79 1.41,1.41 1.79,-1.79zM17.24,18.16l1.79,1.8 1.41,-1.41 -1.8,-1.79 -1.4,1.4zM20,10.5v2h3v-2h-3zM12,5.5c-3.31,0 -6,2.69 -6,6s2.69,6 6,6 6,-2.69 6,-6 -2.69,-6 -6,-6zM11,22.45h2V19.5h-2v2.95zM3.55,18.54l1.41,1.41 1.79,-1.8 -1.41,-1.41 -1.79,1.8z"/>
+</vector>
+
+================================================================================
+## FILE: app/src/main/res/drawable/ic_football.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path android:fillColor="#00D4AA"
+        android:pathData="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2zM12,18.5L8.24,15.66l1.23,-3.8h5.06l1.23,3.8L12,18.5zM8.24,8.34L12,5.5l3.76,2.84 -1.44,4.43H9.68L8.24,8.34z"/>
+</vector>
+
+================================================================================
+## FILE: app/src/main/res/drawable/ic_football_outline.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:strokeColor="#4A5568"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2z"/>
+    <path
+        android:strokeColor="#4A5568"
+        android:strokeWidth="1"
+        android:fillColor="#00000000"
+        android:pathData="M12,5.5l3.76,2.84 -1.44,4.43H9.68L8.24,8.34L12,5.5z"/>
+</vector>
+
+================================================================================
+## FILE: app/src/main/res/drawable/ic_live_indicator.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#FF0066" />
+            <corners android:radius="4dp" />
+            <size android:width="40dp" android:height="16dp" />
+        </shape>
+    </item>
+</layer-list>
+
+================================================================================
+## FILE: app/src/main/res/drawable/preview_watchface.xml
+================================================================================
+
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:centerX="0.5"
+                android:centerY="0.3"
+                android:gradientRadius="150"
+                android:startColor="#152238"
+                android:centerColor="#0A1628"
+                android:endColor="#061020" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <stroke android:width="2dp" android:color="#00D4AA" />
+        </shape>
+    </item>
+</layer-list>
+
+================================================================================
+## FILE: app/src/main/kotlin/com/arsenal/watchface/complications/ArsenalMatchDataSource.kt
+================================================================================
+
+package com.arsenal.watchface.complications
+
+import android.content.ComponentName
+import android.content.Context
+import android.graphics.drawable.Icon
+import android.util.Log
+import androidx.wear.watchface.complications.data.*
+import androidx.wear.watchface.complications.datasource.ComplicationDataSourceService
+import androidx.wear.watchface.complications.datasource.ComplicationRequest
+import com.arsenal.watchface.R
+import com.arsenal.watchface.data.ArsenalFixture
+import com.arsenal.watchface.data.MatchRepository
+import com.arsenal.watchface.data.MatchState
+import kotlinx.coroutines.*
+import java.time.*
+import java.time.format.DateTimeFormatter
+
+class ArsenalMatchDataSource : ComplicationDataSourceService() {
+
+    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    private lateinit var matchRepository: MatchRepository
+
+    companion object {
+        private const val TAG = "ArsenalMatchData"
+        const val ARSENAL_TEAM_ID = 57L
+
+        fun getComponentName(context: Context): ComponentName {
+            return ComponentName(context, ArsenalMatchDataSource::class.java)
+        }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        matchRepository = MatchRepository(applicationContext)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.cancel()
+    }
+
+    override fun getPreviewData(type: ComplicationType): ComplicationData? {
+        return when (type) {
+            ComplicationType.LONG_TEXT -> LongTextComplicationData.Builder(
+                text = PlainComplicationText.Builder("ARS vs LIV").build(),
+                contentDescription = PlainComplicationText.Builder("Match preview").build()
+            ).setTitle(PlainComplicationText.Builder("17:30").build())
+                .setMonochromaticImage(MonochromaticImage.Builder(
+                    Icon.createWithResource(this, R.drawable.ic_football)
+                ).build()).build()
+            ComplicationType.SHORT_TEXT -> ShortTextComplicationData.Builder(
+                text = PlainComplicationText.Builder("2-1").build(),
+                contentDescription = PlainComplicationText.Builder("Score").build()
+            ).setTitle(PlainComplicationText.Builder("LIVE").build()).build()
+            else -> null
+        }
+    }
+
+    override fun onComplicationRequest(
+        request: ComplicationRequest,
+        listener: ComplicationRequestListener
+    ) {
+        scope.launch {
+            try {
+                val fixture = matchRepository.getTodayFixture()
+                val currentTime = ZonedDateTime.now()
+                val state = determineMatchState(fixture, currentTime)
+
+                val complicationData = when (state) {
+                    MatchState.NO_MATCH -> NoDataComplicationData()
+                    MatchState.MATCH_UPCOMING -> createUpcomingMatchData(fixture!!)
+                    MatchState.MATCH_LIVE -> createLiveMatchData(fixture!!)
+                    MatchState.MATCH_HALFTIME -> createHalftimeData(fixture!!)
+                    MatchState.MATCH_ENDED -> createMatchEndedData(fixture!!)
+                    MatchState.MATCH_POSTPONED -> createPostponedData(fixture!!)
+                }
+                listener.onComplicationData(complicationData)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error", e)
+                listener.onComplicationData(NoDataComplicationData())
+            }
+        }
+    }
+
+    private fun determineMatchState(fixture: ArsenalFixture?, currentTime: ZonedDateTime): MatchState {
+        if (fixture == null) return MatchState.NO_MATCH
+        val kickoff = fixture.kickoffTime.atZone(currentTime.zone)
+        val estimatedEnd = kickoff.plusMinutes(105)
+        return when {
+            !fixture.isToday(currentTime) -> MatchState.NO_MATCH
+            fixture.status in listOf("POSTPONED", "CANCELLED") -> MatchState.MATCH_POSTPONED
+            currentTime.isBefore(kickoff) -> MatchState.MATCH_UPCOMING
+            fixture.status == "IN_PLAY" -> MatchState.MATCH_LIVE
+            fixture.status == "PAUSED" -> MatchState.MATCH_HALFTIME
+            fixture.status == "FINISHED" && currentTime.isBefore(estimatedEnd.plusHours(2)) -> MatchState.MATCH_ENDED
+            else -> MatchState.NO_MATCH
+        }
+    }
+
+    private fun createUpcomingMatchData(fixture: ArsenalFixture): ComplicationData {
+        val kickoffTime = fixture.kickoffTime.atZone(ZoneId.systemDefault())
+            .format(DateTimeFormatter.ofPattern("HH:mm"))
+        val matchup = "${fixture.homeTeam.shortName} vs ${fixture.awayTeam.shortName}"
+        val isAway = !fixture.isArsenalHome
+
+        return LongTextComplicationData.Builder(
+            text = PlainComplicationText.Builder(matchup).build(),
+            contentDescription = PlainComplicationText.Builder(if (isAway) "AWAY" else "HOME").build()
+        ).setTitle(PlainComplicationText.Builder(kickoffTime).build())
+            .setMonochromaticImage(MonochromaticImage.Builder(
+                Icon.createWithResource(this, R.drawable.ic_football)
+            ).build())
+            .setTapAction(createMatchTapAction(fixture))
+            .build()
+    }
+
+    private fun createLiveMatchData(fixture: ArsenalFixture): ComplicationData {
+        val score = "${fixture.homeScore ?: 0} - ${fixture.awayScore ?: 0}"
+        val minute = "${fixture.minute ?: 0}'"
+        return LongTextComplicationData.Builder(
+            text = PlainComplicationText.Builder(score).build(),
+            contentDescription = PlainComplicationText.Builder("MATCH_LIVE").build()
+        ).setTitle(PlainComplicationText.Builder("LIVE $minute").build())
+            .setMonochromaticImage(MonochromaticImage.Builder(
+                Icon.createWithResource(this, R.drawable.ic_live_indicator)
+            ).build())
+            .setTapAction(createMatchTapAction(fixture))
+            .build()
+    }
+
+    private fun createHalftimeData(fixture: ArsenalFixture): ComplicationData {
+        val score = "${fixture.homeScore ?: 0} - ${fixture.awayScore ?: 0}"
+        return LongTextComplicationData.Builder(
+            text = PlainComplicationText.Builder(score).build(),
+            contentDescription = PlainComplicationText.Builder("MATCH_HALFTIME").build()
+        ).setTitle(PlainComplicationText.Builder("HT").build())
+            .setMonochromaticImage(MonochromaticImage.Builder(
+                Icon.createWithResource(this, R.drawable.ic_football)
+            ).build()).build()
+    }
+
+    private fun createMatchEndedData(fixture: ArsenalFixture): ComplicationData {
+        val score = "${fixture.homeScore ?: 0} - ${fixture.awayScore ?: 0}"
+        val arsenalWon = (fixture.isArsenalHome && (fixture.homeScore ?: 0) > (fixture.awayScore ?: 0)) ||
+                (!fixture.isArsenalHome && (fixture.awayScore ?: 0) > (fixture.homeScore ?: 0))
+        val contentDesc = if (arsenalWon) "VICTORY" else "MATCH_ENDED"
+
+        return LongTextComplicationData.Builder(
+            text = PlainComplicationText.Builder(score).build(),
+            contentDescription = PlainComplicationText.Builder(contentDesc).build()
+        ).setTitle(PlainComplicationText.Builder("FT").build())
+            .setMonochromaticImage(MonochromaticImage.Builder(
+                Icon.createWithResource(this, R.drawable.ic_football)
+            ).build()).build()
+    }
+
+    private fun createPostponedData(fixture: ArsenalFixture): ComplicationData {
+        val matchup = "${fixture.homeTeam.shortName} vs ${fixture.awayTeam.shortName}"
+        return LongTextComplicationData.Builder(
+            text = PlainComplicationText.Builder(matchup).build(),
+            contentDescription = PlainComplicationText.Builder("MATCH_POSTPONED").build()
+        ).setTitle(PlainComplicationText.Builder("POSTPONED").build()).build()
+    }
+
+    private fun createMatchTapAction(fixture: ArsenalFixture): android.app.PendingIntent? {
+        val intent = android.content.Intent(android.content.Intent.ACTION_VIEW,
+            android.net.Uri.parse("https://www.arsenal.com/matches"))
+        return android.app.PendingIntent.getActivity(this, fixture.id.toInt(), intent,
+            android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE)
+    }
+}
+
+================================================================================
+## FILE: app/src/main/kotlin/com/arsenal/watchface/data/MatchModels.kt
+================================================================================
+
+package com.arsenal.watchface.data
+
+import java.time.Duration
+import java.time.Instant
+import java.time.ZonedDateTime
+import android.content.Context
+import android.util.Log
+import com.google.android.gms.wearable.DataMapItem
+import com.google.android.gms.wearable.Wearable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
+enum class MatchState {
+    NO_MATCH, MATCH_UPCOMING, MATCH_LIVE, MATCH_HALFTIME, MATCH_ENDED, MATCH_POSTPONED
+}
+
+data class ArsenalFixture(
+    val id: Long,
+    val competition: Competition,
+    val homeTeam: Team,
+    val awayTeam: Team,
+    val kickoffTime: Instant,
+    val status: String,
+    val homeScore: Int?,
+    val awayScore: Int?,
+    val minute: Int?,
+    val venue: String?,
+    val events: List<MatchEvent> = emptyList()
+) {
+    companion object { const val ARSENAL_TEAM_ID = 57L }
+    val isArsenalHome: Boolean get() = homeTeam.id == ARSENAL_TEAM_ID
+    fun isToday(currentTime: ZonedDateTime): Boolean {
+        val kickoffDate = kickoffTime.atZone(currentTime.zone).toLocalDate()
+        return kickoffDate == currentTime.toLocalDate()
+    }
+}
+
+data class Team(val id: Long, val name: String, val shortName: String, val crestUrl: String? = null)
+data class Competition(val id: Long, val name: String, val emblemUrl: String? = null)
+data class MatchEvent(val type: EventType, val minute: Int, val team: Team, val player: String, val assist: String? = null)
+enum class EventType { GOAL, OWN_GOAL, PENALTY, PENALTY_MISS, YELLOW_CARD, RED_CARD, SUBSTITUTION }
+
+class MatchRepository(private val context: Context) {
+    private var cachedFixture: ArsenalFixture? = null
+    private var lastFetchTime: Instant = Instant.EPOCH
+
+    suspend fun getTodayFixture(): ArsenalFixture? {
+        val cacheAge = Duration.between(lastFetchTime, Instant.now())
+        if (cachedFixture != null) {
+            val maxAge = when (cachedFixture?.status) {
+                "IN_PLAY", "PAUSED" -> Duration.ofMinutes(1)
+                else -> Duration.ofHours(1)
+            }
+            if (cacheAge < maxAge) return cachedFixture
+        }
+        return fetchFromDataLayer()
+    }
+
+    private suspend fun fetchFromDataLayer(): ArsenalFixture? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val dataClient = Wearable.getDataClient(context)
+                val dataItems = com.google.android.gms.tasks.Tasks.await(
+                    dataClient.getDataItems(android.net.Uri.parse("wear://*/arsenal/match"))
+                )
+                dataItems.firstOrNull()?.let { item ->
+                    val dataMap = DataMapItem.fromDataItem(item).dataMap
+                    if (dataMap.containsKey("match_id")) {
+                        val fixture = ArsenalFixture(
+                            id = dataMap.getLong("match_id"),
+                            competition = Competition(dataMap.getLong("competition_id", 0), dataMap.getString("competition", "")),
+                            homeTeam = Team(dataMap.getLong("home_team_id", 0), dataMap.getString("home_team", ""), dataMap.getString("home_team_short", "")),
+                            awayTeam = Team(dataMap.getLong("away_team_id", 0), dataMap.getString("away_team", ""), dataMap.getString("away_team_short", "")),
+                            kickoffTime = Instant.ofEpochMilli(dataMap.getLong("kickoff")),
+                            status = dataMap.getString("status", "SCHEDULED"),
+                            homeScore = if (dataMap.containsKey("home_score")) dataMap.getInt("home_score") else null,
+                            awayScore = if (dataMap.containsKey("away_score")) dataMap.getInt("away_score") else null,
+                            minute = if (dataMap.containsKey("minute")) dataMap.getInt("minute") else null,
+                            venue = dataMap.getString("venue")
+                        )
+                        cachedFixture = fixture
+                        lastFetchTime = Instant.now()
+                        fixture
+                    } else null
+                }
+            } catch (e: Exception) {
+                Log.e("MatchRepository", "Error", e)
+                cachedFixture
+            }
+        }
+    }
+}
+
+================================================================================
+## FILE: app/src/main/kotlin/com/arsenal/watchface/data/FirebaseMatchService.kt
+================================================================================
+
+package com.arsenal.watchface.data
+
+import android.content.Context
+import android.content.SharedPreferences
+import android.util.Log
+import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
+import com.arsenal.watchface.complications.ArsenalMatchDataSource
+import com.arsenal.watchface.utils.MatchAlertService
+import com.google.android.gms.wearable.*
+import kotlinx.coroutines.*
+
+class FirebaseMatchService : WearableListenerService() {
+    companion object {
+        private const val TAG = "FirebaseMatchService"
+        const val PATH_KICKOFF = "/arsenal/match/kickoff"
+        const val PATH_GOAL_ALERT = "/arsenal/match/goal"
+        const val PATH_HALFTIME = "/arsenal/match/halftime"
+        const val PATH_FULLTIME = "/arsenal/match/fulltime"
+        private const val PREFS_NAME = "arsenal_watchface_prefs"
+        private const val PREF_AUDIO_ENABLED = "match_audio_enabled"
+    }
+
+    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    private lateinit var alertService: MatchAlertService
+    private lateinit var prefs: SharedPreferences
+
+    override fun onCreate() {
+        super.onCreate()
+        alertService = MatchAlertService(this)
+        prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        alertService.release()
+        scope.cancel()
+    }
+
+    override fun onMessageReceived(messageEvent: MessageEvent) {
+        Log.d(TAG, "Message: ${messageEvent.path}")
+        val audioEnabled = prefs.getBoolean(PREF_AUDIO_ENABLED, true)
+        val data = String(messageEvent.data)
+
+        when (messageEvent.path) {
+            PATH_KICKOFF -> alertService.triggerKickoffAlert(audioEnabled)
+            PATH_GOAL_ALERT -> {
+                val parts = data.split("|")
+                val scorer = parts.getOrNull(0)
+                val teamId = parts.getOrNull(2)?.toLongOrNull()
+                if (teamId == ArsenalMatchDataSource.ARSENAL_TEAM_ID) {
+                    alertService.triggerGoalAlert(scorer, audioEnabled)
+                }
+            }
+            PATH_HALFTIME -> alertService.triggerHalftimeAlert(data)
+            PATH_FULLTIME -> {
+                val parts = data.split("|")
+                val score = parts.getOrNull(0) ?: ""
+                val result = parts.getOrNull(1) ?: ""
+                alertService.triggerFullTimeAlert(score, result)
+                if (result.equals("WIN", ignoreCase = true)) {
+                    alertService.triggerVictoryAlert(score, audioEnabled)
+                }
+            }
+        }
+        requestComplicationUpdate()
+    }
+
+    override fun onDataChanged(dataEvents: DataEventBuffer) {
+        dataEvents.forEach { event ->
+            if (event.type == DataEvent.TYPE_CHANGED && event.dataItem.uri.path == "/arsenal/match") {
+                requestComplicationUpdate()
+            }
+        }
+    }
+
+    private fun requestComplicationUpdate() {
+        try {
+            val requester = ComplicationDataSourceUpdateRequester.create(this,
+                ArsenalMatchDataSource.getComponentName(this))
+            requester.requestUpdateAll()
+        } catch (e: Exception) { Log.e(TAG, "Update error", e) }
+    }
+}
+
+================================================================================
+## FILE: app/src/main/kotlin/com/arsenal/watchface/utils/MatchAlertService.kt
+================================================================================
+
+package com.arsenal.watchface.utils
+
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.media.AudioAttributes
+import android.media.AudioManager
+import android.media.MediaPlayer
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
+import android.util.Log
+import androidx.core.app.NotificationCompat
+import com.arsenal.watchface.R
+
+class MatchAlertService(private val context: Context) {
+    companion object {
+        private const val TAG = "MatchAlertService"
+        private const val CHANNEL_ID = "arsenal_match_alerts"
+        private const val NOTIFICATION_ID = 1001
+        private val KICKOFF_PATTERN = longArrayOf(0, 200, 100, 200)
+        private val GOAL_PATTERN = longArrayOf(0, 100, 50, 150, 50, 200, 50, 300, 100, 400)
+        private val VICTORY_PATTERN = longArrayOf(0, 500, 200, 500, 200, 800)
+        private val ALERT_PATTERN = longArrayOf(0, 150, 100, 150)
+    }
+
+    private var mediaPlayer: MediaPlayer? = null
+    private val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    private val vibrator: Vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        (context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
+    } else {
+        @Suppress("DEPRECATION")
+        context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    }
+
+    init { createNotificationChannel() }
+
+    fun triggerKickoffAlert(audioEnabled: Boolean) {
+        Log.d(TAG, "Kick-off alert")
+        performHapticFeedback(KICKOFF_PATTERN)
+        if (audioEnabled && !isDeviceSilent()) playSound(R.raw.kickoff_whistle)
+        showNotification("Kick-Off!", "The match has started!")
+    }
+
+    fun triggerGoalAlert(scorerName: String?, audioEnabled: Boolean) {
+        Log.d(TAG, "Goal alert: $scorerName")
+        performHapticFeedback(GOAL_PATTERN)
+        if (audioEnabled && !isDeviceSilent()) playSound(R.raw.crowd_roar)
+        val message = scorerName?.let { "GOAL! $it scores!" } ?: "GOAL! Arsenal have scored!"
+        showNotification("GOOOAL!", message)
+    }
+
+    fun triggerVictoryAlert(finalScore: String, audioEnabled: Boolean) {
+        Log.d(TAG, "Victory alert: $finalScore")
+        performHapticFeedback(VICTORY_PATTERN)
+        if (audioEnabled && !isDeviceSilent()) playSound(R.raw.victory_fanfare)
+        showNotification("Victory!", "Arsenal win $finalScore! COYG!")
+    }
+
+    fun triggerHalftimeAlert(score: String) {
+        performHapticFeedback(ALERT_PATTERN)
+        showNotification("Half-Time", "Score: $score")
+    }
+
+    fun triggerFullTimeAlert(finalScore: String, result: String) {
+        performHapticFeedback(ALERT_PATTERN)
+        showNotification("Full Time - $result", "Final: $finalScore")
+    }
+
+    private fun performHapticFeedback(pattern: LongArray) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val amplitudes = IntArray(pattern.size) { i -> if (i % 2 == 0) 0 else VibrationEffect.DEFAULT_AMPLITUDE }
+                vibrator.vibrate(VibrationEffect.createWaveform(pattern, amplitudes, -1))
+            } else {
+                @Suppress("DEPRECATION") vibrator.vibrate(pattern, -1)
+            }
+        } catch (e: Exception) { Log.e(TAG, "Haptic error", e) }
+    }
+
+    private fun playSound(soundResId: Int) {
+        try {
+            mediaPlayer?.release()
+            mediaPlayer = MediaPlayer.create(context, soundResId)?.apply {
+                setAudioAttributes(AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build())
+                setOnCompletionListener { it.release(); mediaPlayer = null }
+                start()
+            }
+        } catch (e: Exception) { Log.e(TAG, "Sound error", e) }
+    }
+
+    private fun isDeviceSilent() = audioManager.ringerMode in listOf(
+        AudioManager.RINGER_MODE_SILENT, AudioManager.RINGER_MODE_VIBRATE)
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(CHANNEL_ID, "Arsenal Match Alerts",
+                NotificationManager.IMPORTANCE_HIGH).apply {
+                enableVibration(true)
+                vibrationPattern = ALERT_PATTERN
+            }
+            context.getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
+        }
+    }
+
+    private fun showNotification(title: String, message: String) {
+        try {
+            val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_complication_match)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true).build()
+            context.getSystemService(NotificationManager::class.java).notify(NOTIFICATION_ID, notification)
+        } catch (e: Exception) { Log.e(TAG, "Notification error", e) }
+    }
+
+    fun release() { mediaPlayer?.release(); mediaPlayer = null }
+}
+
+================================================================================
+## FILE: app/src/main/kotlin/com/arsenal/watchface/utils/BootReceiver.kt
+================================================================================
+
+package com.arsenal.watchface.utils
+
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.util.Log
+import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
+import com.arsenal.watchface.complications.ArsenalMatchDataSource
+
+class BootReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
+            Log.d("BootReceiver", "Boot completed, refreshing complications")
+            try {
+                val requester = ComplicationDataSourceUpdateRequester.create(context,
+                    ArsenalMatchDataSource.getComponentName(context))
+                requester.requestUpdateAll()
+            } catch (e: Exception) {
+                Log.e("BootReceiver", "Error refreshing complications", e)
+            }
+        }
+    }
+}
+
+================================================================================
+## AUDIO FILES (Place in app/src/main/res/raw/)
+================================================================================
+
+You need to add these audio files manually:
+- kickoff_whistle.mp3 (1-2 seconds, referee whistle)
+- crowd_roar.mp3 (2-3 seconds, crowd cheering)
+- victory_fanfare.mp3 (3-5 seconds, victory sound)
+
+Download free sounds from:
+- https://freesound.org (search "referee whistle", "crowd cheer")
+- https://pixabay.com/sound-effects/
+
+The app will work without them (haptic-only alerts).
+
+================================================================================
+## BUILD & INSTALL
+================================================================================
+
+1. Open project in Android Studio
+2. Sync Gradle files
+3. Build: ./gradlew assembleDebug
+4. Connect watch via ADB: adb connect <watch-ip>:5555
+5. Install: adb install app/build/outputs/apk/debug/app-debug.apk
+6. Select "Arsenal 25/26 Third Kit" in watch face gallery
+
+================================================================================
