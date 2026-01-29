@@ -78,11 +78,11 @@
         /* Arsenal Cannon - Professional SVG */
         .cannon-logo {
             position: absolute;
-            top: 28px;
+            top: 24px;
             left: 50%;
             transform: translateX(-50%);
-            width: 48px;
-            height: 26px;
+            width: 58px;
+            height: 24px;
             z-index: 10;
         }
 
@@ -531,26 +531,45 @@
                     </g>
                 </svg>
 
-                <!-- Arsenal Cannon Logo -->
-                <svg class="cannon-logo" viewBox="0 0 100 50">
+                <!-- Arsenal Cannon Logo - Accurate Design -->
+                <svg class="cannon-logo" viewBox="0 0 110 44">
+                    <defs>
+                        <linearGradient id="cannonGold" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#c9a355"/>
+                            <stop offset="50%" stop-color="#a07830"/>
+                            <stop offset="100%" stop-color="#8b6914"/>
+                        </linearGradient>
+                        <linearGradient id="barrelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#b8944a"/>
+                            <stop offset="40%" stop-color="#96783c"/>
+                            <stop offset="100%" stop-color="#7a6230"/>
+                        </linearGradient>
+                    </defs>
+
                     <!-- Cannon Barrel -->
-                    <path d="M2,20 L2,30 L8,28 L8,22 Z" fill="#c9a043"/>
-                    <path d="M6,18 L60,14 L62,18 L62,32 L60,36 L6,32 Z" fill="#d4a853"/>
-                    <path d="M6,20 L58,16.5 L58,33.5 L6,30 Z" fill="#c49843"/>
+                    <path d="M2,17 L4,15 L50,13 L52,15 L52,29 L50,31 L4,29 L2,27 Z" fill="url(#barrelGrad)"/>
+                    <ellipse cx="3" cy="22" rx="3" ry="6" fill="#8b7335"/>
 
-                    <!-- Wheel -->
-                    <circle cx="78" cy="28" r="18" fill="#d4a853"/>
-                    <circle cx="78" cy="28" r="13" fill="#a07830"/>
-                    <circle cx="78" cy="28" r="4" fill="#d4a853"/>
+                    <!-- Barrel Detail Lines -->
+                    <path d="M6,15 L48,13.5" stroke="#7a6230" stroke-width="0.5" fill="none"/>
+                    <path d="M6,29 L48,30.5" stroke="#c9a355" stroke-width="0.5" fill="none"/>
 
-                    <!-- Wheel Spokes -->
-                    <line x1="78" y1="12" x2="78" y2="44" stroke="#d4a853" stroke-width="2.5"/>
-                    <line x1="62" y1="28" x2="94" y2="28" stroke="#d4a853" stroke-width="2.5"/>
-                    <line x1="66" y1="16" x2="90" y2="40" stroke="#d4a853" stroke-width="2"/>
-                    <line x1="66" y1="40" x2="90" y2="16" stroke="#d4a853" stroke-width="2"/>
+                    <!-- Wheel Outer Ring -->
+                    <circle cx="75" cy="22" r="20" fill="none" stroke="url(#cannonGold)" stroke-width="4"/>
 
-                    <!-- Wheel Stand -->
-                    <path d="M68,42 L88,42 L85,50 L71,50 Z" fill="#a07830"/>
+                    <!-- Wheel Hub -->
+                    <circle cx="75" cy="22" r="6" fill="url(#cannonGold)"/>
+                    <circle cx="75" cy="22" r="3" fill="#6b5520"/>
+
+                    <!-- Wheel Spokes - 8 spokes radiating from center -->
+                    <line x1="75" y1="6" x2="75" y2="38" stroke="#a08040" stroke-width="2.5"/>
+                    <line x1="59" y1="22" x2="91" y2="22" stroke="#a08040" stroke-width="2.5"/>
+                    <line x1="63.7" y1="10.7" x2="86.3" y2="33.3" stroke="#a08040" stroke-width="2"/>
+                    <line x1="63.7" y1="33.3" x2="86.3" y2="10.7" stroke="#a08040" stroke-width="2"/>
+
+                    <!-- Spoke highlights -->
+                    <line x1="75" y1="7" x2="75" y2="37" stroke="#c9a355" stroke-width="0.5"/>
+                    <line x1="60" y1="22" x2="90" y2="22" stroke="#c9a355" stroke-width="0.5"/>
                 </svg>
 
                 <!-- Hour Markers -->
