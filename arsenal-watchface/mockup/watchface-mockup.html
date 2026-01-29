@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arsenal FC 2025/26 Watch Face - Interactive Mockup</title>
+    <title>Arsenal FC 2025/26 Watch Face</title>
     <style>
         * {
             margin: 0;
@@ -12,34 +12,35 @@
         }
 
         body {
-            background: linear-gradient(135deg, #3a4a5e 0%, #2a3a4e 50%, #1a2a3e 100%);
+            background: linear-gradient(135deg, #1e2d3d 0%, #15232f 50%, #0d1820 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: #fff;
             padding: 20px;
         }
 
         h1 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: #CDFF00;
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            color: #E8FF00;
             text-align: center;
+            font-weight: 600;
         }
 
         .subtitle {
-            color: #A0A8B4;
-            margin-bottom: 30px;
-            font-size: 0.9rem;
+            color: #8899aa;
+            margin-bottom: 25px;
+            font-size: 0.85rem;
         }
 
         .watch-container {
             position: relative;
-            width: 380px;
-            height: 380px;
+            width: 340px;
+            height: 340px;
         }
 
         .watch-bezel {
@@ -47,465 +48,440 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: linear-gradient(145deg, #3a4a5e, #2a3a4e);
+            background: linear-gradient(145deg, #4a5a6a, #2a3a4a);
             box-shadow:
-                0 10px 40px rgba(0, 0, 0, 0.5),
-                inset 0 2px 4px rgba(255, 255, 255, 0.1),
-                inset 0 -2px 4px rgba(0, 0, 0, 0.3);
-            padding: 14px;
+                0 15px 50px rgba(0, 0, 0, 0.6),
+                inset 0 2px 3px rgba(255, 255, 255, 0.15),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.4);
+            padding: 12px;
         }
 
         .watch-screen {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: #0A1628;
+            background: #0a1520;
             position: relative;
             overflow: hidden;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
         }
 
-        /* Geometric chevron/zigzag pattern */
-        .chevron-pattern {
+        /* Geometric Pattern - Matching Reference */
+        .geo-pattern {
             position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
             z-index: 1;
+            opacity: 1;
         }
 
-        .chevron-pattern svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Emirates Stadium silhouette */
-        .stadium-silhouette {
+        /* Arsenal Cannon - Professional SVG */
+        .cannon-logo {
             position: absolute;
-            top: 28%;
+            top: 28px;
             left: 50%;
             transform: translateX(-50%);
-            width: 85%;
-            height: 50px;
-            opacity: 0.15;
-            z-index: 2;
-            pointer-events: none;
+            width: 48px;
+            height: 26px;
+            z-index: 10;
         }
 
-        /* Vignette */
-        .watch-screen::after {
-            content: '';
+        /* Hour Markers */
+        .markers {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.5) 100%);
-            pointer-events: none;
-            z-index: 20;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
         }
 
-        /* Victory glow animation */
+        .marker {
+            position: absolute;
+            background: #FF2882;
+            left: 50%;
+            transform-origin: center bottom;
+        }
+
+        .marker-major {
+            width: 4px;
+            height: 16px;
+            margin-left: -2px;
+            border-radius: 2px;
+        }
+
+        .marker-minor {
+            width: 2px;
+            height: 8px;
+            margin-left: -1px;
+            border-radius: 1px;
+        }
+
+        /* Clock Hands */
+        .hands-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 15;
+        }
+
+        .hand {
+            position: absolute;
+            left: 50%;
+            bottom: 50%;
+            transform-origin: center bottom;
+        }
+
+        .hour-hand {
+            width: 10px;
+            height: 55px;
+            margin-left: -5px;
+            background: linear-gradient(to top, #E8FF00 0%, #D4F000 100%);
+            border-radius: 5px 5px 3px 3px;
+            box-shadow: 0 0 8px rgba(232, 255, 0, 0.5);
+        }
+
+        .minute-hand {
+            width: 8px;
+            height: 80px;
+            margin-left: -4px;
+            background: linear-gradient(to top, #E8FF00 0%, #D4F000 100%);
+            border-radius: 4px 4px 2px 2px;
+            box-shadow: 0 0 8px rgba(232, 255, 0, 0.5);
+        }
+
+        .second-hand {
+            width: 2px;
+            height: 90px;
+            margin-left: -1px;
+            background: #FF2882;
+            border-radius: 1px;
+            box-shadow: 0 0 6px rgba(255, 40, 130, 0.6);
+        }
+
+        .center-pin {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 14px;
+            height: 14px;
+            background: radial-gradient(circle at 30% 30%, #FF4090, #FF2882, #cc1166);
+            border-radius: 50%;
+            z-index: 20;
+            box-shadow: 0 0 8px rgba(255, 40, 130, 0.8);
+        }
+
+        /* Battery Indicator */
+        .battery-indicator {
+            position: absolute;
+            top: 55px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            z-index: 10;
+        }
+
+        .battery-segment {
+            width: 16px;
+            height: 10px;
+            background: #E8FF00;
+            border-radius: 2px;
+            box-shadow: 0 0 4px rgba(232, 255, 0, 0.4);
+            transition: all 0.3s;
+        }
+
+        .battery-segment.off {
+            background: #1a2530;
+            box-shadow: none;
+        }
+
+        /* Info Display */
+        .info-display {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 10;
+        }
+
+        .time-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 2px;
+        }
+
+        .day-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 1.5px;
+        }
+
+        .digital-time {
+            font-size: 26px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .ampm {
+            font-size: 11px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 1px;
+        }
+
+        .steps-display {
+            font-size: 15px;
+            font-weight: 700;
+            color: #E8FF00;
+            letter-spacing: 2px;
+            margin-top: 2px;
+            text-shadow: 0 0 10px rgba(232, 255, 0, 0.3);
+        }
+
+        .date-display {
+            font-size: 11px;
+            color: #6688aa;
+            letter-spacing: 2px;
+            margin-top: 2px;
+        }
+
+        /* Match Section */
+        .match-display {
+            position: absolute;
+            bottom: 45px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 10;
+            display: none;
+        }
+
+        .match-display.active {
+            display: block;
+        }
+
+        .match-status {
+            font-size: 11px;
+            font-weight: 700;
+            color: #FF2882;
+            letter-spacing: 2px;
+            margin-bottom: 3px;
+        }
+
+        .match-score {
+            font-size: 26px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 2px;
+        }
+
+        .match-teams {
+            font-size: 10px;
+            color: #6688aa;
+            letter-spacing: 1px;
+        }
+
+        .live-indicator {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: #FF2882;
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        /* Victory Glow */
         .victory-glow {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
             border-radius: 50%;
-            border: 4px solid transparent;
-            background: conic-gradient(from 0deg, #FF2D78, #FF0066, #FF2D78, #FF0066, #FF2D78) border-box;
-            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            animation: victoryPulse 1s ease-in-out infinite alternate;
+            background: conic-gradient(from 0deg, #FF2882, #FF0066, #FF2882, #FF0066, #FF2882);
             opacity: 0;
-            transition: opacity 0.5s;
-            pointer-events: none;
-            z-index: 30;
+            animation: none;
+            z-index: -1;
         }
 
         .victory-glow.active {
             opacity: 1;
+            animation: rotate 2s linear infinite, glow 1s ease-in-out infinite alternate;
         }
 
-        @keyframes victoryPulse {
-            0% { opacity: 0.5; transform: scale(1); }
-            100% { opacity: 1; transform: scale(1.02); }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        /* Away stripe */
+        @keyframes glow {
+            from { filter: blur(4px); }
+            to { filter: blur(8px); }
+        }
+
+        /* Away Stripe */
         .away-stripe {
             position: absolute;
-            left: 0;
-            top: 0;
-            width: 6px;
-            height: 100%;
-            background: linear-gradient(to bottom,
-                transparent 0%,
-                #E8B87D 30%,
-                #E8B87D 70%,
-                transparent 100%);
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60%;
+            background: linear-gradient(to bottom, transparent, #D4A853, #D4A853, transparent);
+            border-radius: 2px;
             opacity: 0;
+            z-index: 10;
             transition: opacity 0.3s;
-            z-index: 25;
         }
 
         .away-stripe.visible {
             opacity: 1;
         }
 
-        /* Cannon crest */
-        .cannon-crest {
-            position: absolute;
-            top: 32px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 55px;
-            height: 30px;
-            z-index: 15;
-        }
-
-        .cannon-crest svg {
-            width: 100%;
-            height: 100%;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-        }
-
-        /* Hour markers - Pink */
-        .hour-markers {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 5;
-        }
-
-        .hour-marker {
-            position: absolute;
-            background: #FF2D78;
-            transform-origin: center center;
-        }
-
-        /* Main markers at 12, 3, 6, 9 */
-        .hour-marker.major {
-            width: 4px;
-            height: 18px;
-            border-radius: 2px;
-        }
-
-        /* Minor tick marks */
-        .hour-marker.minor {
-            width: 2px;
-            height: 10px;
-            border-radius: 1px;
-        }
-
-        /* Clock hands container */
-        .clock-hands {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-        }
-
-        /* Analog hands - Neon Yellow/Lime with outline style */
-        .hand {
-            position: absolute;
-            bottom: 50%;
-            left: 50%;
-            transform-origin: bottom center;
-            border-radius: 4px;
-        }
-
-        .hand.hour {
-            width: 8px;
-            height: 70px;
-            margin-left: -4px;
-            background: transparent;
-            border: 3px solid #CDFF00;
-            border-radius: 4px;
-        }
-
-        .hand.minute {
-            width: 6px;
-            height: 95px;
-            margin-left: -3px;
-            background: transparent;
-            border: 3px solid #CDFF00;
-            border-radius: 3px;
-        }
-
-        .hand.second {
-            width: 2px;
-            height: 105px;
-            margin-left: -1px;
-            background: #FF2D78;
-        }
-
-        /* Center dot */
-        .center-dot {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 12px;
-            height: 12px;
-            background: #FF2D78;
-            border-radius: 50%;
-            z-index: 12;
-            border: 2px solid #CDFF00;
-        }
-
-        /* Battery arc at 3 o'clock */
-        .battery-arc-container {
-            position: absolute;
-            top: 18px;
-            right: 18px;
-            width: 50px;
-            height: 70px;
-            z-index: 15;
-        }
-
-        .battery-arc-container svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Bottom info area */
-        .bottom-info {
-            position: absolute;
-            bottom: 55px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            z-index: 15;
-            width: 200px;
-        }
-
-        .day-time-row {
-            display: flex;
-            align-items: baseline;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 4px;
-        }
-
-        .day-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #FFFFFF;
-            letter-spacing: 1px;
-        }
-
-        .digital-time {
-            font-size: 24px;
-            font-weight: 700;
-            color: #FFFFFF;
-            letter-spacing: 1px;
-        }
-
-        .ampm {
-            font-size: 12px;
-            font-weight: 600;
-            color: #FFFFFF;
-            margin-left: 4px;
-        }
-
-        .steps-row {
-            font-size: 16px;
-            font-weight: 700;
-            color: #CDFF00;
-            letter-spacing: 1px;
-            margin-bottom: 2px;
-        }
-
-        .date-row {
-            font-size: 12px;
-            color: #A0A8B4;
-            letter-spacing: 2px;
-        }
-
-        /* Match section - appears when match is on */
-        .match-section {
-            position: absolute;
-            bottom: 45px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            text-align: center;
-            z-index: 15;
-            display: none;
-        }
-
-        .match-section.active {
-            display: block;
-        }
-
-        .match-status {
-            font-size: 12px;
-            font-weight: 700;
-            color: #FF2D78;
-            letter-spacing: 2px;
-            margin-bottom: 4px;
-        }
-
-        .match-score {
-            font-size: 28px;
-            font-weight: 700;
-            color: #FFFFFF;
-        }
-
-        .match-teams-small {
-            font-size: 11px;
-            color: #A0A8B4;
-            letter-spacing: 1px;
-        }
-
-        .live-dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: #FF2D78;
-            border-radius: 50%;
-            margin-right: 6px;
-            animation: livePulse 1s ease-in-out infinite;
-        }
-
-        @keyframes livePulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        /* Controls */
-        .controls {
-            margin-top: 30px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            max-width: 450px;
-        }
-
-        .control-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .control-btn.primary {
-            background: linear-gradient(135deg, #CDFF00, #9FCC00);
-            color: #0A1628;
-        }
-
-        .control-btn.secondary {
-            background: #152238;
-            color: #A0A8B4;
-            border: 1px solid #4A5568;
-        }
-
-        .control-btn.danger {
-            background: linear-gradient(135deg, #FF2D78, #FF0066);
-            color: white;
-        }
-
-        .control-btn.gold {
-            background: linear-gradient(135deg, #D4A853, #E8B87D);
-            color: #0A1628;
-        }
-
-        .control-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        /* State display */
-        .state-display {
-            margin-top: 20px;
-            padding: 15px 25px;
-            background: #152238;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .state-label {
-            font-size: 11px;
-            color: #A0A8B4;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-
-        .state-value {
-            font-size: 14px;
-            color: #CDFF00;
-            font-weight: 600;
-        }
-
         /* AOD Mode */
         .watch-screen.aod {
-            background: #000000;
+            background: #000;
         }
 
-        .watch-screen.aod .chevron-pattern,
-        .watch-screen.aod .stadium-silhouette,
-        .watch-screen.aod .battery-arc-container {
+        .watch-screen.aod .geo-pattern,
+        .watch-screen.aod .battery-indicator {
             opacity: 0;
         }
 
-        .watch-screen.aod .cannon-crest svg path {
+        .watch-screen.aod .marker {
+            background: #333;
+        }
+
+        .watch-screen.aod .hour-hand,
+        .watch-screen.aod .minute-hand {
+            background: #444;
+            box-shadow: none;
+        }
+
+        .watch-screen.aod .second-hand {
+            opacity: 0;
+        }
+
+        .watch-screen.aod .center-pin {
+            background: #333;
+            box-shadow: none;
+        }
+
+        .watch-screen.aod .cannon-logo path,
+        .watch-screen.aod .cannon-logo circle,
+        .watch-screen.aod .cannon-logo line {
             fill: none !important;
-            stroke: #333;
-            stroke-width: 1;
-        }
-
-        .watch-screen.aod .hour-marker {
-            background: #333;
-        }
-
-        .watch-screen.aod .hand.hour,
-        .watch-screen.aod .hand.minute {
-            border-color: #555;
-        }
-
-        .watch-screen.aod .hand.second {
-            display: none;
-        }
-
-        .watch-screen.aod .center-dot {
-            background: #333;
-            border-color: #555;
+            stroke: #333 !important;
         }
 
         .watch-screen.aod .digital-time,
         .watch-screen.aod .day-label,
         .watch-screen.aod .ampm {
-            color: #555;
-        }
-
-        .watch-screen.aod .steps-row {
             color: #444;
         }
 
-        .watch-screen.aod .date-row {
+        .watch-screen.aod .steps-display {
             color: #333;
+            text-shadow: none;
         }
 
-        /* Responsive */
-        @media (max-width: 420px) {
+        .watch-screen.aod .date-display {
+            color: #222;
+        }
+
+        /* Controls */
+        .controls {
+            margin-top: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            max-width: 400px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #E8FF00, #c4d900);
+            color: #0a1520;
+        }
+
+        .btn-secondary {
+            background: #1a2530;
+            color: #8899aa;
+            border: 1px solid #2a3540;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #FF2882, #e01060);
+            color: white;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #D4A853, #c49843);
+            color: #0a1520;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* State Display */
+        .state-box {
+            margin-top: 15px;
+            padding: 12px 20px;
+            background: #0d1820;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #1a2530;
+        }
+
+        .state-label {
+            font-size: 10px;
+            color: #6688aa;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        .state-value {
+            font-size: 13px;
+            color: #E8FF00;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 380px) {
             .watch-container {
-                width: 320px;
-                height: 320px;
+                width: 300px;
+                height: 300px;
             }
         }
     </style>
@@ -515,262 +491,226 @@
     <p class="subtitle">Samsung Galaxy Watch 6 - Interactive Mockup</p>
 
     <div class="watch-container">
+        <div class="victory-glow" id="victoryGlow"></div>
         <div class="watch-bezel">
             <div class="watch-screen" id="watchScreen">
-                <!-- Victory Glow -->
-                <div class="victory-glow" id="victoryGlow"></div>
+
+                <!-- Geometric Pattern -->
+                <svg class="geo-pattern" viewBox="0 0 316 316">
+                    <defs>
+                        <clipPath id="screenClip">
+                            <circle cx="158" cy="158" r="158"/>
+                        </clipPath>
+                    </defs>
+                    <g clip-path="url(#screenClip)">
+                        <!-- Background -->
+                        <rect width="316" height="316" fill="#0a1520"/>
+
+                        <!-- Geometric Shapes - Bottom Half -->
+                        <path d="M0,180 L50,150 L100,180 L100,230 L50,200 L0,230 Z" fill="#061018" opacity="0.8"/>
+                        <path d="M70,200 L120,170 L170,200 L170,250 L120,220 L70,250 Z" fill="#061018" opacity="0.8"/>
+                        <path d="M140,180 L190,150 L240,180 L240,230 L190,200 L140,230 Z" fill="#061018" opacity="0.8"/>
+                        <path d="M210,200 L260,170 L310,200 L310,250 L260,220 L210,250 Z" fill="#061018" opacity="0.8"/>
+                        <path d="M-20,230 L30,200 L80,230 L80,280 L30,250 L-20,280 Z" fill="#061018" opacity="0.8"/>
+                        <path d="M50,250 L100,220 L150,250 L150,300 L100,270 L50,300 Z" fill="#061018" opacity="0.8"/>
+                        <path d="M120,230 L170,200 L220,230 L220,280 L170,250 L120,280 Z" fill="#061018" opacity="0.8"/>
+                        <path d="M190,250 L240,220 L290,250 L290,300 L240,270 L190,300 Z" fill="#061018" opacity="0.8"/>
+                        <path d="M260,230 L310,200 L360,230 L360,280 L310,250 L260,280 Z" fill="#061018" opacity="0.8"/>
+
+                        <!-- Stadium Silhouette -->
+                        <g opacity="0.12" transform="translate(40, 100)">
+                            <path d="M0,40 Q60,20 120,18 Q180,20 240,40" stroke="#3a4a5a" stroke-width="2" fill="none"/>
+                            <line x1="20" y1="35" x2="20" y2="55" stroke="#3a4a5a" stroke-width="1"/>
+                            <line x1="50" y1="28" x2="50" y2="55" stroke="#3a4a5a" stroke-width="1"/>
+                            <line x1="80" y1="22" x2="80" y2="55" stroke="#3a4a5a" stroke-width="1"/>
+                            <line x1="120" y1="18" x2="120" y2="55" stroke="#3a4a5a" stroke-width="1"/>
+                            <line x1="160" y1="22" x2="160" y2="55" stroke="#3a4a5a" stroke-width="1"/>
+                            <line x1="190" y1="28" x2="190" y2="55" stroke="#3a4a5a" stroke-width="1"/>
+                            <line x1="220" y1="35" x2="220" y2="55" stroke="#3a4a5a" stroke-width="1"/>
+                        </g>
+                    </g>
+                </svg>
+
+                <!-- Arsenal Cannon Logo -->
+                <svg class="cannon-logo" viewBox="0 0 100 50">
+                    <!-- Cannon Barrel -->
+                    <path d="M2,20 L2,30 L8,28 L8,22 Z" fill="#c9a043"/>
+                    <path d="M6,18 L60,14 L62,18 L62,32 L60,36 L6,32 Z" fill="#d4a853"/>
+                    <path d="M6,20 L58,16.5 L58,33.5 L6,30 Z" fill="#c49843"/>
+
+                    <!-- Wheel -->
+                    <circle cx="78" cy="28" r="18" fill="#d4a853"/>
+                    <circle cx="78" cy="28" r="13" fill="#a07830"/>
+                    <circle cx="78" cy="28" r="4" fill="#d4a853"/>
+
+                    <!-- Wheel Spokes -->
+                    <line x1="78" y1="12" x2="78" y2="44" stroke="#d4a853" stroke-width="2.5"/>
+                    <line x1="62" y1="28" x2="94" y2="28" stroke="#d4a853" stroke-width="2.5"/>
+                    <line x1="66" y1="16" x2="90" y2="40" stroke="#d4a853" stroke-width="2"/>
+                    <line x1="66" y1="40" x2="90" y2="16" stroke="#d4a853" stroke-width="2"/>
+
+                    <!-- Wheel Stand -->
+                    <path d="M68,42 L88,42 L85,50 L71,50 Z" fill="#a07830"/>
+                </svg>
+
+                <!-- Hour Markers -->
+                <div class="markers" id="markers"></div>
 
                 <!-- Away Stripe -->
                 <div class="away-stripe" id="awayStripe"></div>
 
-                <!-- Chevron/Zigzag Pattern Background -->
-                <div class="chevron-pattern">
-                    <svg viewBox="0 0 352 352" preserveAspectRatio="xMidYMid slice">
-                        <defs>
-                            <clipPath id="circleClip">
-                                <circle cx="176" cy="176" r="176"/>
-                            </clipPath>
-                        </defs>
-                        <g clip-path="url(#circleClip)">
-                            <!-- Dark chevron shapes -->
-                            <path d="M0,200 L60,160 L120,200 L120,260 L60,220 L0,260 Z" fill="#061020"/>
-                            <path d="M80,220 L140,180 L200,220 L200,280 L140,240 L80,280 Z" fill="#061020"/>
-                            <path d="M160,200 L220,160 L280,200 L280,260 L220,220 L160,260 Z" fill="#061020"/>
-                            <path d="M240,220 L300,180 L360,220 L360,280 L300,240 L240,280 Z" fill="#061020"/>
-                            <path d="M0,280 L60,240 L120,280 L120,340 L60,300 L0,340 Z" fill="#061020"/>
-                            <path d="M80,300 L140,260 L200,300 L200,360 L140,320 L80,360 Z" fill="#061020"/>
-                            <path d="M160,280 L220,240 L280,280 L280,340 L220,300 L160,340 Z" fill="#061020"/>
-                            <path d="M240,300 L300,260 L360,300 L360,360 L300,320 L240,360 Z" fill="#061020"/>
-                            <!-- Additional upper chevrons -->
-                            <path d="M-40,240 L20,200 L80,240 L80,300 L20,260 L-40,300 Z" fill="#061020"/>
-                            <path d="M280,200 L340,160 L400,200 L400,260 L340,220 L280,260 Z" fill="#061020"/>
-                        </g>
-                    </svg>
-                </div>
-
-                <!-- Emirates Stadium Silhouette -->
-                <div class="stadium-silhouette">
-                    <svg viewBox="0 0 300 50" preserveAspectRatio="xMidYMid meet">
-                        <!-- Stadium roof structure -->
-                        <path d="M0,45 L10,40 L20,35 L40,30 L60,28 L80,26 L100,25 L120,24 L140,24 L160,24 L180,24 L200,25 L220,26 L240,28 L260,30 L280,35 L290,40 L300,45"
-                              stroke="#1a2a3e" stroke-width="2" fill="none"/>
-                        <!-- Truss supports -->
-                        <line x1="30" y1="32" x2="30" y2="50" stroke="#1a2a3e" stroke-width="1"/>
-                        <line x1="60" y1="28" x2="60" y2="50" stroke="#1a2a3e" stroke-width="1"/>
-                        <line x1="90" y1="25" x2="90" y2="50" stroke="#1a2a3e" stroke-width="1"/>
-                        <line x1="120" y1="24" x2="120" y2="50" stroke="#1a2a3e" stroke-width="1"/>
-                        <line x1="150" y1="24" x2="150" y2="50" stroke="#1a2a3e" stroke-width="1"/>
-                        <line x1="180" y1="24" x2="180" y2="50" stroke="#1a2a3e" stroke-width="1"/>
-                        <line x1="210" y1="25" x2="210" y2="50" stroke="#1a2a3e" stroke-width="1"/>
-                        <line x1="240" y1="28" x2="240" y2="50" stroke="#1a2a3e" stroke-width="1"/>
-                        <line x1="270" y1="32" x2="270" y2="50" stroke="#1a2a3e" stroke-width="1"/>
-                        <!-- Cross braces -->
-                        <line x1="30" y1="35" x2="60" y2="45" stroke="#1a2a3e" stroke-width="0.5"/>
-                        <line x1="60" y1="35" x2="90" y2="45" stroke="#1a2a3e" stroke-width="0.5"/>
-                        <line x1="90" y1="32" x2="120" y2="42" stroke="#1a2a3e" stroke-width="0.5"/>
-                        <line x1="180" y1="32" x2="210" y2="42" stroke="#1a2a3e" stroke-width="0.5"/>
-                        <line x1="210" y1="35" x2="240" y2="45" stroke="#1a2a3e" stroke-width="0.5"/>
-                        <line x1="240" y1="35" x2="270" y2="45" stroke="#1a2a3e" stroke-width="0.5"/>
-                    </svg>
-                </div>
-
-                <!-- Hour Markers -->
-                <div class="hour-markers" id="hourMarkers">
-                    <!-- Generated by JavaScript -->
-                </div>
-
-                <!-- Cannon Crest -->
-                <div class="cannon-crest">
-                    <svg viewBox="0 0 120 60">
-                        <!-- Cannon barrel -->
-                        <path fill="#D4A853" d="M5,25 L75,20 L80,28 L80,38 L75,46 L5,41 Z"/>
-                        <!-- Muzzle -->
-                        <path fill="#C49843" d="M2,23 L2,43 L8,41 L8,27 Z"/>
-                        <!-- Wheel -->
-                        <circle cx="95" cy="35" r="18" fill="#D4A853"/>
-                        <circle cx="95" cy="35" r="12" fill="#8B6914"/>
-                        <circle cx="95" cy="35" r="5" fill="#D4A853"/>
-                        <!-- Wheel spokes -->
-                        <line x1="95" y1="20" x2="95" y2="50" stroke="#D4A853" stroke-width="2"/>
-                        <line x1="80" y1="35" x2="110" y2="35" stroke="#D4A853" stroke-width="2"/>
-                        <line x1="84" y1="24" x2="106" y2="46" stroke="#D4A853" stroke-width="2"/>
-                        <line x1="84" y1="46" x2="106" y2="24" stroke="#D4A853" stroke-width="2"/>
-                    </svg>
-                </div>
-
-                <!-- Battery Arc at 3 o'clock -->
-                <div class="battery-arc-container">
-                    <svg viewBox="0 0 50 70">
-                        <!-- Battery segments -->
-                        <g id="batterySegments" transform="translate(5, 5)">
-                            <!-- 5 segments, bottom to top -->
-                            <rect x="0" y="52" width="18" height="8" rx="2" fill="#CDFF00" class="battery-seg" data-index="0"/>
-                            <rect x="0" y="40" width="18" height="8" rx="2" fill="#CDFF00" class="battery-seg" data-index="1"/>
-                            <rect x="0" y="28" width="18" height="8" rx="2" fill="#CDFF00" class="battery-seg" data-index="2"/>
-                            <rect x="0" y="16" width="18" height="8" rx="2" fill="#CDFF00" class="battery-seg" data-index="3"/>
-                            <rect x="0" y="4" width="18" height="8" rx="2" fill="#CDFF00" class="battery-seg" data-index="4"/>
-                        </g>
-                    </svg>
+                <!-- Battery Indicator -->
+                <div class="battery-indicator" id="batteryIndicator">
+                    <div class="battery-segment" data-index="4"></div>
+                    <div class="battery-segment" data-index="3"></div>
+                    <div class="battery-segment" data-index="2"></div>
+                    <div class="battery-segment" data-index="1"></div>
+                    <div class="battery-segment" data-index="0"></div>
                 </div>
 
                 <!-- Clock Hands -->
-                <div class="clock-hands">
-                    <div class="hand hour" id="hourHand"></div>
-                    <div class="hand minute" id="minuteHand"></div>
-                    <div class="hand second" id="secondHand"></div>
+                <div class="hands-container">
+                    <div class="hand hour-hand" id="hourHand"></div>
+                    <div class="hand minute-hand" id="minuteHand"></div>
+                    <div class="hand second-hand" id="secondHand"></div>
                 </div>
-                <div class="center-dot"></div>
+                <div class="center-pin"></div>
 
-                <!-- Bottom Info (Normal Mode) -->
-                <div class="bottom-info" id="bottomInfo">
-                    <div class="day-time-row">
-                        <span class="day-label" id="dayLabel">WED</span>
-                        <span class="digital-time" id="digitalTime">11:51:15</span>
+                <!-- Info Display -->
+                <div class="info-display" id="infoDisplay">
+                    <div class="time-row">
+                        <span class="day-label" id="dayLabel">THU</span>
+                        <span class="digital-time" id="digitalTime">6:43:16</span>
                         <span class="ampm" id="ampm">PM</span>
                     </div>
-                    <div class="steps-row" id="stepsRow">12,450 STEPS</div>
-                    <div class="date-row" id="dateRow">JAN 28</div>
+                    <div class="steps-display" id="stepsDisplay">12,450 STEPS</div>
+                    <div class="date-display" id="dateDisplay">JAN 29</div>
                 </div>
 
-                <!-- Match Section (Match Mode) -->
-                <div class="match-section" id="matchSection">
+                <!-- Match Display -->
+                <div class="match-display" id="matchDisplay">
                     <div class="match-status" id="matchStatus">
-                        <span class="live-dot"></span>LIVE 67'
+                        <span class="live-indicator"></span>LIVE 67'
                     </div>
                     <div class="match-score" id="matchScore">2 - 1</div>
-                    <div class="match-teams-small">ARSENAL vs LIVERPOOL</div>
+                    <div class="match-teams">ARSENAL vs LIVERPOOL</div>
                 </div>
+
             </div>
         </div>
     </div>
 
     <div class="controls">
-        <button class="control-btn primary" onclick="setState('normal')">Normal</button>
-        <button class="control-btn secondary" onclick="setState('upcoming')">Pre-Match</button>
-        <button class="control-btn danger" onclick="setState('live')">LIVE</button>
-        <button class="control-btn gold" onclick="setState('victory')">Victory!</button>
-        <button class="control-btn secondary" onclick="toggleAway()">Toggle Away</button>
-        <button class="control-btn secondary" onclick="toggleAOD()">AOD Mode</button>
+        <button class="btn btn-primary" onclick="setState('normal')">Normal</button>
+        <button class="btn btn-secondary" onclick="setState('upcoming')">Pre-Match</button>
+        <button class="btn btn-danger" onclick="setState('live')">LIVE</button>
+        <button class="btn btn-gold" onclick="setState('victory')">Victory!</button>
+        <button class="btn btn-secondary" onclick="toggleAway()">Toggle Away</button>
+        <button class="btn btn-secondary" onclick="toggleAOD()">AOD Mode</button>
     </div>
 
-    <div class="state-display">
+    <div class="state-box">
         <div class="state-label">Current State</div>
         <div class="state-value" id="currentState">NORMAL</div>
     </div>
 
     <script>
         // Generate hour markers
-        function generateHourMarkers() {
-            const container = document.getElementById('hourMarkers');
-            const centerX = 176;
-            const centerY = 176;
-            const outerRadius = 160;
+        function generateMarkers() {
+            const container = document.getElementById('markers');
+            const cx = 158, cy = 158, r = 145;
 
             for (let i = 0; i < 60; i++) {
-                const angle = (i * 6 - 90) * (Math.PI / 180);
+                const angle = (i * 6 - 90) * Math.PI / 180;
                 const marker = document.createElement('div');
-                marker.className = 'hour-marker';
+                marker.className = 'marker';
 
-                if (i % 5 === 0) {
-                    // Major markers at 12, 3, 6, 9 (indices 0, 15, 30, 45)
-                    marker.classList.add('major');
-                    const markerLength = 18;
-                    const x = centerX + (outerRadius - markerLength/2) * Math.cos(angle);
-                    const y = centerY + (outerRadius - markerLength/2) * Math.sin(angle);
-                    marker.style.left = (x - 2) + 'px';
-                    marker.style.top = (y - 9) + 'px';
-                    marker.style.transform = `rotate(${i * 6}deg)`;
-                } else {
-                    // Minor tick marks
-                    marker.classList.add('minor');
-                    const markerLength = 10;
-                    const x = centerX + (outerRadius - markerLength/2) * Math.cos(angle);
-                    const y = centerY + (outerRadius - markerLength/2) * Math.sin(angle);
-                    marker.style.left = (x - 1) + 'px';
-                    marker.style.top = (y - 5) + 'px';
-                    marker.style.transform = `rotate(${i * 6}deg)`;
-                }
+                const isMajor = i % 5 === 0;
+                marker.classList.add(isMajor ? 'marker-major' : 'marker-minor');
+
+                const len = isMajor ? 16 : 8;
+                const x = cx + (r - len/2) * Math.cos(angle);
+                const y = cy + (r - len/2) * Math.sin(angle);
+
+                marker.style.top = y + 'px';
+                marker.style.transform = `translateX(-50%) rotate(${i * 6}deg)`;
+                marker.style.left = x + 'px';
 
                 container.appendChild(marker);
             }
         }
 
-        // Real-time clock with analog hands
+        // Update clock
         function updateClock() {
             const now = new Date();
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            const seconds = now.getSeconds();
+            const h = now.getHours();
+            const m = now.getMinutes();
+            const s = now.getSeconds();
 
             // Analog hands
-            const hourDeg = (hours % 12) * 30 + minutes * 0.5;
-            const minuteDeg = minutes * 6 + seconds * 0.1;
-            const secondDeg = seconds * 6;
+            const hourDeg = (h % 12) * 30 + m * 0.5;
+            const minDeg = m * 6 + s * 0.1;
+            const secDeg = s * 6;
 
-            document.getElementById('hourHand').style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
-            document.getElementById('minuteHand').style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
-            document.getElementById('secondHand').style.transform = `translateX(-50%) rotate(${secondDeg}deg)`;
+            document.getElementById('hourHand').style.transform = `rotate(${hourDeg}deg)`;
+            document.getElementById('minuteHand').style.transform = `rotate(${minDeg}deg)`;
+            document.getElementById('secondHand').style.transform = `rotate(${secDeg}deg)`;
 
             // Digital time
-            const h = hours % 12 || 12;
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            const timeStr = `${h}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            document.getElementById('digitalTime').textContent = timeStr;
-            document.getElementById('ampm').textContent = ampm;
+            const h12 = h % 12 || 12;
+            document.getElementById('digitalTime').textContent =
+                `${h12}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+            document.getElementById('ampm').textContent = h >= 12 ? 'PM' : 'AM';
 
-            // Day
-            const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+            // Day & Date
+            const days = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+            const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
             document.getElementById('dayLabel').textContent = days[now.getDay()];
-
-            // Date
-            const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-            document.getElementById('dateRow').textContent = `${months[now.getMonth()]} ${now.getDate()}`;
+            document.getElementById('dateDisplay').textContent = `${months[now.getMonth()]} ${now.getDate()}`;
         }
 
         // State management
-        let currentState = 'normal';
+        let state = 'normal';
         let isAway = false;
         let isAOD = false;
 
-        function setState(state) {
-            currentState = state;
-            const bottomInfo = document.getElementById('bottomInfo');
-            const matchSection = document.getElementById('matchSection');
-            const victoryGlow = document.getElementById('victoryGlow');
-            const stateDisplay = document.getElementById('currentState');
-            const matchStatus = document.getElementById('matchStatus');
-            const matchScore = document.getElementById('matchScore');
+        function setState(newState) {
+            state = newState;
+            const info = document.getElementById('infoDisplay');
+            const match = document.getElementById('matchDisplay');
+            const glow = document.getElementById('victoryGlow');
+            const status = document.getElementById('matchStatus');
+            const score = document.getElementById('matchScore');
 
-            // Reset
-            victoryGlow.classList.remove('active');
-            bottomInfo.style.display = 'block';
-            matchSection.classList.remove('active');
+            glow.classList.remove('active');
+            info.style.display = 'block';
+            match.classList.remove('active');
 
-            switch(state) {
+            switch(newState) {
                 case 'normal':
-                    stateDisplay.textContent = 'NORMAL';
+                    document.getElementById('currentState').textContent = 'NORMAL';
                     break;
                 case 'upcoming':
-                    bottomInfo.style.display = 'none';
-                    matchSection.classList.add('active');
-                    matchStatus.innerHTML = 'TODAY 17:30';
-                    matchScore.textContent = 'ARS vs LIV';
-                    stateDisplay.textContent = 'MATCH_UPCOMING';
+                    info.style.display = 'none';
+                    match.classList.add('active');
+                    status.innerHTML = 'TODAY 17:30';
+                    score.textContent = 'ARS vs LIV';
+                    document.getElementById('currentState').textContent = 'MATCH UPCOMING';
                     break;
                 case 'live':
-                    bottomInfo.style.display = 'none';
-                    matchSection.classList.add('active');
-                    matchStatus.innerHTML = '<span class="live-dot"></span>LIVE 67\'';
-                    matchScore.textContent = '2 - 1';
-                    stateDisplay.textContent = 'MATCH_LIVE';
+                    info.style.display = 'none';
+                    match.classList.add('active');
+                    status.innerHTML = '<span class="live-indicator"></span>LIVE 67\'';
+                    score.textContent = '2 - 1';
+                    document.getElementById('currentState').textContent = 'MATCH LIVE';
                     break;
                 case 'victory':
-                    victoryGlow.classList.add('active');
-                    bottomInfo.style.display = 'none';
-                    matchSection.classList.add('active');
-                    matchStatus.innerHTML = 'FULL TIME';
-                    matchScore.textContent = '2 - 1 WIN!';
-                    stateDisplay.textContent = 'VICTORY';
+                    glow.classList.add('active');
+                    info.style.display = 'none';
+                    match.classList.add('active');
+                    status.innerHTML = 'FULL TIME';
+                    score.textContent = '2 - 1 WIN!';
+                    document.getElementById('currentState').textContent = 'VICTORY!';
                     break;
             }
         }
@@ -785,47 +725,31 @@
             document.getElementById('watchScreen').classList.toggle('aod', isAOD);
         }
 
-        // Battery simulation
-        let battery = 75;
+        // Battery
+        let battery = 80;
         function updateBattery() {
-            const segments = document.querySelectorAll('.battery-seg');
-            const activeSegments = Math.ceil(battery / 20);
-
-            segments.forEach((seg, index) => {
-                const segIndex = parseInt(seg.dataset.index);
-                if (segIndex < activeSegments) {
-                    seg.style.opacity = '1';
-                    // Color based on battery level
-                    if (battery > 60) {
-                        seg.style.fill = '#CDFF00';
-                    } else if (battery > 30) {
-                        seg.style.fill = '#D4A853';
-                    } else {
-                        seg.style.fill = '#FF2D78';
-                    }
-                } else {
-                    seg.style.opacity = '0.2';
-                    seg.style.fill = '#333';
-                }
+            const segs = document.querySelectorAll('.battery-segment');
+            const active = Math.ceil(battery / 20);
+            segs.forEach(seg => {
+                const idx = parseInt(seg.dataset.index);
+                seg.classList.toggle('off', idx >= active);
             });
         }
 
-        // Simulate battery drain
         setInterval(() => {
-            battery = Math.max(5, battery - 1);
-            if (battery <= 5) battery = 100;
+            battery = battery <= 5 ? 100 : battery - 1;
             updateBattery();
         }, 3000);
 
-        // Simulate step count
+        // Steps simulation
         let steps = 12450;
         setInterval(() => {
-            steps += Math.floor(Math.random() * 20);
-            document.getElementById('stepsRow').textContent = steps.toLocaleString() + ' STEPS';
+            steps += Math.floor(Math.random() * 15);
+            document.getElementById('stepsDisplay').textContent = steps.toLocaleString() + ' STEPS';
         }, 5000);
 
-        // Initialize
-        generateHourMarkers();
+        // Init
+        generateMarkers();
         updateClock();
         updateBattery();
         setInterval(updateClock, 1000);
